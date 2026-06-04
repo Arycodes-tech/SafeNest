@@ -1,18 +1,15 @@
 import React from 'react'
 
 export const Select = ({
-  label, // Text above the dropdown
-  value, // Currently selected value
-  onChange, // Function called when selection changes
-  options = [], // Array of { label, value } – will come from backend
-  placeholder = 'Select an option', // Default first option text
-  error = '', // Error message (shows red border + text)
-  disabled = false, // If true, dropdown is greyed out
+  label,
+  value, 
+  onChange, 
+  options = [], 
+  placeholder = 'Select an option', 
+  error = '', 
+  disabled = false, 
 }) => {
-  // Text colour: grey if nothing selected, dark if a value is chosen
   const textColour = value ? 'text-text-primary' : 'text-text-tertiary'
-
-  // Border style: red if error, otherwise normal with hover/focus effects
   let borderStyle = ''
   if (error) {
     borderStyle = 'border border-error'
@@ -20,13 +17,9 @@ export const Select = ({
     borderStyle =
       'border border-border hover:border-primary-light focus:border-primary focus:shadow-input-focus'
   }
-
-  // Background and cursor based on disabled state
   const backgroundStyle = disabled
     ? 'bg-disabled cursor-not-allowed'
     : 'bg-white cursor-pointer'
-
-  // Combine all classes
   const selectClassName = [
     'w-full rounded-lg px-3 py-3',
     'font-sans text-sm outline-none',

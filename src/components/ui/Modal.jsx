@@ -1,11 +1,9 @@
 import { Button } from './Button'
 
 export const Modal = ({ title, children, isOpen, onClose }) => {
-  // If isOpen is false, we return nothing so the modal does not show on the page.
   if (!isOpen) {
     return null
   }
-
   return (
     <div className="fixed z-50 flex items-center justify-center bg-dark p-4 sm:p-5">
       <div className="w-full max-w-[480px] rounded-lg bg-white p-5 font-sans sm:p-6">
@@ -17,7 +15,6 @@ export const Modal = ({ title, children, isOpen, onClose }) => {
             Close
           </Button>
         </div>
-
         {children}
       </div>
     </div>

@@ -1,8 +1,7 @@
-import heroImage from '../../assets/hero.png'
+import heroImage from '../../assets/Frame.svg'
 
 export const PropertyGallery = ({ images = [heroImage, heroImage, heroImage] }) => {
   return (
-    // This creates a simple image gallery for a property details page.
     <div className="grid gap-3 font-sans md:grid-cols-[2fr_1fr]">
       <img
         src={images[0]}

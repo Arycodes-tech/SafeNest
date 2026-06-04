@@ -1,30 +1,24 @@
 import React, { useState } from 'react'
 
 export const FilterChips = ({
-  options = [], // Array of { label, value } – will come from backend
-  onFilterChange, // Function to call when selection changes
+  options = [],
+  onFilterChange,
 }) => {
   const [activeFilters, setActiveFilters] = useState([])
-
   const handleChipClick = (value) => {
     const isActive = activeFilters.includes(value)
     let updatedFilters
 
     if (isActive) {
-      // Remove the value
       updatedFilters = activeFilters.filter((item) => item !== value)
     } else {
-      // Add the value
       updatedFilters = [...activeFilters, value]
     }
-
     setActiveFilters(updatedFilters)
-
     if (onFilterChange) {
       onFilterChange(updatedFilters)
     }
   }
-
   const handleClearAll = () => {
     setActiveFilters([])
     if (onFilterChange) onFilterChange([])
@@ -45,7 +39,6 @@ export const FilterChips = ({
         )}
       </div>
 
-      {/* Chips row */}
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const isActive = activeFilters.includes(option.value)
@@ -70,8 +63,6 @@ export const FilterChips = ({
           )
         })}
       </div>
-
-      {/* Active count */}
       {activeFilters.length > 0 && (
         <p className="mt-3 text-xs text-text-tertiary">
           {activeFilters.length}
