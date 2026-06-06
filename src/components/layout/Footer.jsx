@@ -5,8 +5,8 @@ import { Input } from '../ui/Input'
 export const Footer = () => {
   return (
     <footer className="bg-dark px-12 py-12 text-white sm:px-6">
-      <div className="mx-auto max-w-7xl px-40 py-40">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr]">
+      <div className="mx-auto max-w-7xl px-xl py-xl">
+        <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr]">
           <div>
             <div className="mb-4 flex items-center gap-2.5">
               <img src={logo} alt="SafeNest Logo" className="h-9 w-auto" />
@@ -25,26 +25,21 @@ export const Footer = () => {
               <a
                 href="#"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-center text-sm text-white hover:bg-white/20"
-              >
-                
-              </a>
+              ></a>
 
               <a
                 href="#"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-center text-sm text-white hover:bg-white/20"
-              >  
-              </a>
+              ></a>
 
               <a
                 href="#"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-center text-sm text-white hover:bg-white/20"
-              >
-              </a>
+              ></a>
               <a
                 href="#"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-center text-sm text-white hover:bg-white/20"
-              >
-              </a>
+              ></a>
             </div>
           </div>
           <div>
