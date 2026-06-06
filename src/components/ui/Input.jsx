@@ -1,49 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export const Input = ({
-  label, 
-  placeholder = '', 
-  value, 
-  onChange, 
-  type = 'text', 
+  label,
+  placeholder = '',
+  value,
+  onChange,
+  type = 'text',
   error = '',
-  disabled = false, 
+  disabled = false,
+  name = '',
 }) => {
-  let borderStyle = ''
-  if (disabled) {
-    borderStyle = 'border border-border'
-  } else if (error) {
-    borderStyle = 'border border-error'
-  } else {
-    borderStyle =
-      'border border-border hover:border-primary-light focus:border-primary focus:shadow-input-focus'
-  }
-  const backgroundStyle = disabled ? 'bg-disabled' : 'bg-white'
-  const cursorStyle = disabled ? 'cursor-not-allowed' : 'cursor-text'
-  const inputClassName = [
-    'w-full rounded-lg px-3.5 py-3',
-    'font-sans text-sm text-text-primary',
-    'outline-none transition-all duration-200',
-    backgroundStyle,
-    cursorStyle,
-    borderStyle,
-  ].join(' ')
+  const [showPassword, setShowPassword] = useState(false)
+  const isPassword = type === 'password'
+  const inputType = isPassword && showPassword ? 'text' : type
+
   return (
     <div className="w-full">
       {label && (
-        <label className="mb-1.5 block text-sm font-semibold text-text-primary">
+        <label className="mb-xs block text-h3 font-semibold text-text-primary">
           {label}
         </label>
       )}
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        className={inputClassName}
-      />
-      {error && <p className="mt-1.5 text-xs text-error">{error}</p>}
+      <div className="relative">
+        <input
+          type={inputType}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          className="w-full rounded-sm border border-border px-md py-md text-sm text-text-primary outline-none focus:border-primary disabled:bg-disabled pr-10"
+        />
+        {isPassword && (
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2  text-text-tertiary hover:text-primary"
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex={-1}
+          >
+            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+          </button>
+        )}
+      </div>
+      {error && <p className="mt-xs text-xs text-error">{error}</p>}
     </div>
   )
 }
