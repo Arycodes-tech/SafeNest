@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
-import { Input } from '../../components/ui/Input'
+import { Button } from '../components/ui/Button'
+import { Input } from '../components/ui/Input'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
   const role = localStorage.getItem('signupRole')
+
   if (!role) {
     navigate('/role')
     return null
   }
+
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -17,11 +19,10 @@ export const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agencyName, setAgencyName] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
-
   const [errors, setErrors] = useState({})
+
   const handleSignUp = () => {
     const newErrors = {}
-
     if (!fullName.trim()) newErrors.fullName = 'Full name is required'
     if (!email.trim()) newErrors.email = 'Email is required'
     if (!phone.trim()) newErrors.phone = 'Phone number is required'
@@ -29,7 +30,7 @@ export const SignUpPage = () => {
     if (password !== confirmPassword)
       newErrors.confirmPassword = 'Passwords do not match'
     if (role === 'agent' && !agencyName.trim())
-      newErrors.agencyName = 'Agency name is required for agents'
+      newErrors.agencyName = 'Agency name is required'
     if (!agreeTerms) newErrors.agreeTerms = 'You must agree to the terms'
 
     if (Object.keys(newErrors).length > 0) {
@@ -37,57 +38,63 @@ export const SignUpPage = () => {
       return
     }
 
-    // TEMPORARY: backend not ready yet
-console.log('Signup data:', { fullName, email, phone, password, agencyName, agreeTerms, role })
-alert('Signup successful! (demo)')
-navigate('/') 
+    navigate('/verify-otp', { state: { phone } })
+
+    console.log('Signup data:', {
+      fullName,
+      email,
+      phone,
+      password,
+      agencyName,
+      agreeTerms,
+      role,
+    })
+    alert('Signup successful!')
+    navigate('/')
+  }
 
   return (
-    <div className="min-h-screen bg-background-primary flex items-center justify-center px-md py-xl">
+    <div className="min-h-screen bg-background-primary flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
-        <h1 className="text-h2 text-text-primary text-center mb-xs">
+        <h1 className="text-h2 text-text-primary text-center mb-2">
           Create Your Account
         </h1>
-        <p className="text-body text-text-secondary text-center mb-md">
-          Let set up your SafeNest account
+        <p className="text-body text-text-secondary text-center mb-8">
+          Let's set up your SafeNest account!
         </p>
 
-        <div className="flex flex-col gap-md">
+        <div className="flex flex-col gap-5">
           <Input
-            label="Full name"
-            placeholder="Enter your name"
+            label="Full Name"
+            placeholder="Enter your full name"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             error={errors.fullName}
           />
-
           <Input
-            label="Email address"
+            label="Email Address"
             type="email"
             placeholder="Enter your email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={errors.email}
           />
-
           <Input
-            label="Phone number"
+            label="Phone Number"
             type="tel"
             placeholder="Enter your phone number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             error={errors.phone}
           />
-
           <Input
             label="Password"
             type="password"
-            placeholder="Create a password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={errors.password}
           />
-
           <Input
             label="Confirm Password"
             type="password"
@@ -99,7 +106,7 @@ navigate('/')
 
           {role === 'agent' && (
             <Input
-              label="Agency name"
+              label="Agency Name"
               placeholder="Enter your agency name"
               value={agencyName}
               onChange={(e) => setAgencyName(e.target.value)}
@@ -107,7 +114,7 @@ navigate('/')
             />
           )}
 
-          <label className="flex items-start gap-sm text-small text-text-secondary">
+          <label className="flex items-start gap-2 text-sm text-text-secondary">
             <input
               type="checkbox"
               checked={agreeTerms}
@@ -116,13 +123,14 @@ navigate('/')
             />
             <span>
               I agree to the{' '}
-              <button className="text-primary underline" type="button">
+              <button type="button" className="text-primary underline">
                 Terms & Conditions
               </button>{' '}
               and{' '}
-              <button className="text-primary underline" type="button">
+              <button type="button" className="text-primary underline">
                 Privacy Policy
-              </button>
+              </button>{' '}
+              of SafeNest
             </span>
           </label>
           {errors.agreeTerms && (
@@ -130,10 +138,10 @@ navigate('/')
           )}
 
           <Button variant="primary" fullWidth onClick={handleSignUp}>
-            Create Account
+            Continue
           </Button>
 
-          <p className="text-center text-small text-text-tertiary">
+          <p className="text-center text-sm text-text-tertiary">
             Already have an account?{' '}
             <button
               onClick={() => navigate('/login')}

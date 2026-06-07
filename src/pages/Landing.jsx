@@ -3,23 +3,24 @@ import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { PropertyCard } from '../components/property/PropertyCard'
 import {
-  HiOutlineMagnifyingGlass,
+  HiOutlineSearch,
   HiOutlineLocationMarker,
   HiOutlineBadgeCheck,
   HiOutlineLockClosed,
   HiOutlineShieldCheck,
-  HiOutlineChatBubbleOvalLeftRight,
+  HiOutlineChat,
   HiOutlineIdentification,
   HiOutlineHome,
   HiOutlineEye,
   HiOutlineScale,
   HiOutlineUsers,
-  HiOutlineHandThumbUp,
+  HiOutlineThumbUp,
   HiOutlineFlag,
   HiOutlineChevronDown,
   HiOutlineUserCircle,
   HiOutlineArrowRight,
 } from 'react-icons/hi'
+
 import { MdVerified, MdArticle, MdSecurity, MdBolt } from 'react-icons/md'
 
 const trustItems = [
@@ -27,7 +28,7 @@ const trustItems = [
   { icon: HiOutlineLockClosed, label: 'Escrow Protected' },
   { icon: HiOutlineShieldCheck, label: 'Fraud Prevention' },
   {
-    icon: HiOutlineChatBubbleOvalLeftRight,
+    icon: HiOutlineChat,
     label: 'Secure In-App Communication',
   },
 ]
@@ -110,7 +111,7 @@ const trustFeatures = [
     desc: 'Our team is here to mediate and resolve issues quickly and fairly.',
   },
   {
-    icon: HiOutlineChatBubbleOvalLeftRight,
+    icon: HiOutlineChat,
     title: 'In-app communication logs',
     desc: 'Chat, call, and share docs securely, all activity is logged in-app.',
   },
@@ -128,7 +129,7 @@ const verifyBenefits = [
     desc: 'Verified profiles get 3x more qualified inquiries',
   },
   {
-    icon: HiOutlineHandThumbUp,
+    icon: HiOutlineThumbUp,
     title: 'Build more trust',
     desc: 'Renters feel safe dealing with a verified agent',
   },
@@ -250,7 +251,6 @@ function SearchBar() {
 
   return (
     <div className="bg-white rounded-xl p-4 flex flex-col md:flex-row gap-3 max-w-3xl shadow-card">
-      {/* Location dropdown */}
       <div className="flex-1">
         <label className="block text-caption text-text-tertiary mb-1">
           Location
@@ -311,7 +311,7 @@ function SearchBar() {
           onClick={handleSearch}
           className="w-full md:w-auto bg-primary text-white px-6 py-2.5 rounded-lg text-small font-semibold hover:bg-primary-dark transition-colors flex items-center gap-2"
         >
-          <HiOutlineMagnifyingGlass className="w-4 h-4" />
+          <HiOutlineSearch className="w-4 h-4" />
           <span>Search Listings</span>
         </button>
       </div>
@@ -355,21 +355,22 @@ export default function Landing() {
       <Navbar />
 
       <section
+        id="hero"
         className="relative min-h-[520px] flex flex-col justify-center bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1400&q=80')",
+            'url(https://res.cloudinary.com/dty5t7pq7/image/upload/v1780834395/e0901fce5aa5c561965db8d07c519a71_1_xtfjwm.jpg)',
         }}
       >
         <div className="absolute inset-0 bg-black/50" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-caption px-3 py-1.5 rounded-full mb-6 border border-white/30">
+          <div className="inline-flex items-center gap-2 bg-white  text-text-primary text-caption px-3 py-1.5 rounded-full mb-6 border border-white/30">
             <HiOutlineLocationMarker className="w-4 h-4" />
             <span>Africa's Most Trusted Rental Verification Platform</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4 max-w-2xl">
+          <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-4 max-w-2xl">
             Rent Safely.
             <br />
             Pay Only When
@@ -396,7 +397,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-white border-b border-border py-4">
+      <section id="trust" className="bg-white border-b border-border py-4">
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex flex-wrap justify-center gap-6 md:gap-10">
             {trustItems.map((item, index) => (
@@ -412,7 +413,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-background-secondary py-12 border-b border-border">
+      <section id="stats" className="bg-[#FFF2F2] py-12 border-b border-border">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -435,13 +436,13 @@ export default function Landing() {
 
       <div className="w-full h-48 md:h-64 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1400&q=80"
+          src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1780835468/Screenshot_2026-06-07_133045_fbe3yb.png"
           alt="Nigerian residential street"
           className="w-full h-full object-cover"
         />
       </div>
 
-      <section className="bg-white py-16">
+      <section id="how-it-works" className="bg-white py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-10">
             <h2 className="text-h2 font-bold text-text-primary mb-2">
@@ -471,7 +472,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-background-secondary py-16">
+      <section id="listings" className="bg-background-secondary py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-h2 font-bold text-text-primary">
@@ -491,10 +492,16 @@ export default function Landing() {
             <PropertyCard />
             <PropertyCard />
           </div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-primary text-white px-6 py-3 rounded-lg text-small font-semibold hover:bg-primary-dark transition-colors flex items-center gap-2">
+              <HiOutlineSearch className="w-4 h-4" />
+              Browse Verified Listings
+            </button>
+          </div>
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section id="trust-features" className="bg-white py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-10">
             <span className="text-primary text-small font-medium">
@@ -511,7 +518,7 @@ export default function Landing() {
                 key={index}
                 className="border border-border rounded-xl p-6 hover:shadow-card transition-shadow"
               >
-                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-10 h-10 bg-[#BDDAFF] rounded-lg flex items-center justify-center mb-4">
                   <feature.icon className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="text-small font-semibold text-text-primary mb-2">
@@ -526,7 +533,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-background-secondary py-16">
+      <section id="get-verified" className="bg-background-secondary py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -560,7 +567,7 @@ export default function Landing() {
               </button>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div id="safety" className="flex flex-col gap-6">
               <div className="w-full h-48 bg-blue-50 rounded-2xl flex items-center justify-center">
                 <HiOutlineLockClosed className="w-16 h-16 text-primary" />
               </div>
@@ -607,7 +614,7 @@ export default function Landing() {
                 key={index}
                 className="border border-border rounded-xl p-5 hover:shadow-card transition-shadow"
               >
-                <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-10 h-10 bg-[#BDDAFF] rounded-lg flex items-center justify-center mb-4">
                   <card.icon className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="text-small font-semibold text-text-primary mb-2">
@@ -696,4 +703,3 @@ export default function Landing() {
     </div>
   )
 }
-

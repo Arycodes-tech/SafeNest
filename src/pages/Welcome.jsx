@@ -1,8 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
+import { Button } from '../components/ui/Button'
 
-import heroImage from '../../assets/images/Image.jpg'
+import heroImage from '../assets/images/Image.jpg'
 
 export const WelcomePage = () => {
   const navigate = useNavigate()
