@@ -1,38 +1,36 @@
-const { useState } = React;
+import { useState } from 'react'
 
-function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState('');
+export default function ResetPasswordPage() {
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState('')
 
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isButtonDisabled = !email || !isValidEmail || isLoading;
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const isButtonDisabled = !email || !isValidEmail || isLoading
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      // Mock API - replace with your real endpoint
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setIsSuccess(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setIsSuccess(true)
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
+      setError(err.message || 'Something went wrong. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-white">
       <div className="flex flex-col px-6 pt-12 pb-8 max-w-sm mx-auto">
-        
         <div className="flex justify-center mb-8 mt-4">
-          <img 
-            src="https://res.cloudinary.com/dlldm26g7/image/upload/v1780846615/ChatGPT_Image_May_27_2026_11_20_05_AM_1_mhv1ba.svg" 
-            alt="Forgot Password Illustration" 
+          <img
+            src="https://res.cloudinary.com/dlldm26g7/image/upload/v1780846615/ChatGPT_Image_May_27_2026_11_20_05_AM_1_mhv1ba.svg"
+            alt="Forgot Password Illustration"
             className="w-64 h-48 object-contain"
           />
         </div>
@@ -43,12 +41,16 @@ function ForgotPassword() {
               Forgot Password?
             </h1>
             <p className="text-gray-500 text-center text-sm mb-8 leading-relaxed">
-              Enter your email address and we'll send you a link to reset your password
+              Enter your email address and we'll send you a link to reset your
+              password
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-900 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -81,7 +83,10 @@ function ForgotPassword() {
             </form>
 
             <div className="text-center mt-6">
-              <a href="/login" className="text-blue-600 font-semibold text-base">
+              <a
+                href="/login"
+                className="text-blue-600 font-semibold text-base"
+              >
                 Back to Sign in
               </a>
             </div>
@@ -89,18 +94,31 @@ function ForgotPassword() {
         ) : (
           <div className="text-center mt-8">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
-              <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-8 w-8 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Check your email</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
+              Check your email
+            </h3>
             <p className="text-gray-500 text-sm mb-6">
-              We sent a reset link to <span className="font-semibold text-gray-900">{email}</span>
+              We sent a reset link to{' '}
+              <span className="font-semibold text-gray-900">{email}</span>
             </p>
-            <button 
+            <button
               onClick={() => {
-                setIsSuccess(false);
-                setEmail('');
+                setIsSuccess(false)
+                setEmail('')
               }}
               className="text-sm font-medium text-gray-600 hover:text-gray-500"
             >
@@ -110,8 +128,5 @@ function ForgotPassword() {
         )}
       </div>
     </div>
-  );
+  )
 }
-
-ReactDOM.render(<ForgotPassword />, document.getElementById('root'));
-
