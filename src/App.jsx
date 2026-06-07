@@ -4,7 +4,7 @@ import { WelcomePage } from './pages/WelcomePage/welcome.jsx'
 import { LoginPage } from './pages/Login/login.jsx'
 import { RoleSelectionPage } from './pages/RoleSelection/roleSelection.jsx'
 import { SignUpPage } from './pages/SignUp/signUp.jsx'
-import ForgotPassword from "./components/ForgotPassword";
+import { ForgotPassword } from "./components/ForgotPassword";
 
 function App() {
   return (
