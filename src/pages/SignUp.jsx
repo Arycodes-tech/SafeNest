@@ -38,7 +38,7 @@ export const SignUpPage = () => {
       return
     }
 
-    navigate('/verify-otp', { state: { phone } })
+    navigate('/verify-otp', { state: { phone: phone, email: email } })
 
     console.log('Signup data:', {
       fullName,
@@ -50,7 +50,7 @@ export const SignUpPage = () => {
       role,
     })
     alert('Signup successful!')
-    navigate('/')
+    navigate('/verfy-otp')
   }
 
   return (

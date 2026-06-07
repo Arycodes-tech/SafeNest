@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { FcGoogle } from 'react-icons/fc'
@@ -81,7 +82,7 @@ export const LoginPage = () => {
           <p className="text-center text-sm text-text-tertiary mt-2">
             Don't have an account?{' '}
             <button
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate('/role')}
               className="text-primary underline"
             >
               Sign up

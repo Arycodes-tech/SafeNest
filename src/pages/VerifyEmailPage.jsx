@@ -1,4 +1,3 @@
-// src/pages/VerifyEmailPage.jsx
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
@@ -7,7 +6,6 @@ import { HiOutlineMail } from 'react-icons/hi'
 export const VerifyEmailPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  // Get email from navigation state or localStorage (from signup / forgot password)
   const email =
     location.state?.email ||
     JSON.parse(localStorage.getItem('user') || '{}').email ||
@@ -18,7 +16,6 @@ export const VerifyEmailPage = () => {
 
   const handleResend = () => {
     setResendDisabled(true)
-    // API call to resend email would go here
     console.log('Resend verification email to', email)
     setMessage('Verification email resent! Please check your inbox.')
     setTimeout(() => setResendDisabled(false), 30000)

@@ -38,7 +38,7 @@ export const RoleSelectionPage = () => {
 
   return (
     <div className="min-h-screen bg-background-primary grid grid-cols-1 md:grid-cols-2">
-      <div className="hidden md:block relative bg-primary/5">
+      <div className="hidden md:block px-10 relative bg-primary/5">
         <img
           src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1780844868/view-3d-house-model_1_pb87ww.jpg"
           alt="image"
