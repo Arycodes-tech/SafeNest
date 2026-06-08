@@ -58,7 +58,6 @@ export const RoleSelectionPage = () => {
             </p>
           </div>
 
-          {/* Role cards */}
           <div className="space-y-4 mb-10">
             {roles.map((role) => {
               const isSelected = selectedRole === role.id
