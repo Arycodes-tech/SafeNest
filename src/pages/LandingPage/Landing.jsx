@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Navbar } from '../components/layout/Navbar'
-import { Footer } from '../components/layout/Footer'
-import { PropertyCard } from '../components/property/PropertyCard'
+import { Navbar } from '../../components/layout/Navbar'
+import { Footer } from '../../components/layout/Footer'
+import { PropertyCard } from '../../components/property/PropertyCard'
 import {
   HiOutlineSearch,
   HiOutlineLocationMarker,

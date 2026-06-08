@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
+import { Button } from '../../components/ui/Button'
+import { Input } from '../../components/ui/Input'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -50,7 +50,6 @@ export const SignUpPage = () => {
       role,
     })
     alert('Signup successful!')
-    navigate('/verfy-otp')
   }
 
   return (

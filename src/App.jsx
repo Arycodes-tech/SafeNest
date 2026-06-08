@@ -1,12 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 
-import Landing from './pages/Landing'
-import { LoginPage } from './pages/Login'
-import { SignUpPage } from './pages/SignUp'
-import { RoleSelectionPage } from './pages/RoleSelection'
-import { WelcomePage } from './pages/Welcome'
-import { VerifyOtpPage } from './pages/VerifyOtpPage'
-import { VerifyEmailPage } from './pages/VerifyEmailPage'
+import Landing from './pages/LandingPage/Landing'
+import { LoginPage } from './pages/LoginPage/Login'
+import { SignUpPage } from './pages/SignUpPage/SignUp'
+import { RoleSelectionPage } from './pages/RoleSelectionPage/RoleSelection'
+import { WelcomePage } from './pages/WelcomePage/Welcome'
+import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
+import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
+import { PreferencesPage } from './pages/PreferencePage/Prefrences'
+import { SuccessPage } from './pages/SucessPage/Success'
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Route path="/welcome" element={<WelcomePage />} />
       <Route path="/verify-otp" element={<VerifyOtpPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/preferences" element={<PreferencesPage />} />
+      <Route path="/success" element={<SuccessPage />} />
     </Routes>
   )
 }

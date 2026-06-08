@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Button } from '../components/ui/Button'
+import { Button } from '../../components/ui/Button'
 import { HiOutlineMail } from 'react-icons/hi'
 
 export const VerifyEmailPage = () => {
@@ -9,7 +9,7 @@ export const VerifyEmailPage = () => {
   const email =
     location.state?.email ||
     JSON.parse(localStorage.getItem('user') || '{}').email ||
-    'olamidekanaruwi90@gmail.com'
+    ''
 
   const [resendDisabled, setResendDisabled] = useState(false)
   const [message, setMessage] = useState('')

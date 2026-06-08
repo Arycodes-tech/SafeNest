@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../components/ui/Button'
+import { Button } from '../../components/ui/Button'
 import { FaCheckCircle } from 'react-icons/fa'
 import { FaUser, FaHandshake, FaBuilding } from 'react-icons/fa'
 

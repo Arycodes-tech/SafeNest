@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
-import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
+import { Button } from '../../components/ui/Button'
+import { Input } from '../../components/ui/Input'
 import { FcGoogle } from 'react-icons/fc'
 
 export const LoginPage = () => {
