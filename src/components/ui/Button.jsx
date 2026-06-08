@@ -11,11 +11,11 @@ export const Button = ({
 }) => {
   let sizeClasses = ''
   if (size === 'small') {
-    sizeClasses = 'px-5 py-3 text-sm'
+    sizeClasses = 'px-3 py-1.5 text-sm'
   } else if (size === 'large') {
-    sizeClasses = 'px-8 py-5 text-lg'
+    sizeClasses = 'px-6 py-3 text-base'
   } else {
-    sizeClasses = 'px-3 py-3 text-base'
+    sizeClasses = 'px-4 py-2 text-sm'
   }
 
   let variantClasses = ''
@@ -33,7 +33,7 @@ export const Button = ({
   const baseClasses =
     'inline-flex items-center justify-center gap-2 rounded-lg font-sans font-semibold transition-all duration-200 ' +
     'disabled:cursor-not-allowed disabled:opacity-50 ' +
-    'w-full sm:w-full'
+    'w-full sm:w-auto'
 
   const finalClassName = `${baseClasses} ${sizeClasses} ${variantClasses} ${className}`
 

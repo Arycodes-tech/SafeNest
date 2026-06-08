@@ -18,7 +18,7 @@ export const Input = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="mb-xs block text-h3 font-semibold text-text-primary">
+        <label className="mb-1.5 block text-sm font-semibold text-text-primary">
           {label}
         </label>
       )}
@@ -30,12 +30,12 @@ export const Input = ({
           value={value}
           onChange={onChange}
           disabled={disabled}
-          className="w-full rounded-sm border border-border px-md py-md text-sm text-text-primary outline-none focus:border-primary disabled:bg-disabled pr-10"
+          className="w-full rounded-lg border border-border px-4 py-3 text-sm text-text-primary outline-none focus:border-primary disabled:bg-disabled pr-10"
         />
         {isPassword && (
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2  text-text-tertiary hover:text-primary"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-primary"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
           >
@@ -43,7 +43,7 @@ export const Input = ({
           </button>
         )}
       </div>
-      {error && <p className="mt-xs text-xs text-error">{error}</p>}
+      {error && <p className="mt-1 text-xs text-error">{error}</p>}
     </div>
   )
 }
