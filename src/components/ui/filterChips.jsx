@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 
-export const FilterChips = ({
-  options = [],
-  onFilterChange,
-}) => {
+export const FilterChips = ({ options = [], onFilterChange }) => {
   const [activeFilters, setActiveFilters] = useState([])
   const handleChipClick = (value) => {
     const isActive = activeFilters.includes(value)
@@ -26,7 +23,6 @@ export const FilterChips = ({
 
   return (
     <div className="w-full font-sans">
-      {/* Header row */}
       <div className="mb-3 flex items-center justify-between">
         <p className="text-sm font-semibold text-text-primary">Filters</p>
         {activeFilters.length > 0 && (

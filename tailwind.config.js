@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         primary: '#2B4CDC',
-        'primary-light': '#2B4CDC',
+        'primary-light': '#1E3ABA',
         'primary-dark': '#102B84',
         success: '#16A34A',
         warning: '#F59E08',
@@ -71,7 +71,6 @@ export default {
         floating: '0 4px 14px rgb(15 23 42 / 0.1)',
         'status-hover': '0 8px 20px rgb(15 23 42 / 0.12)',
       },
-
     },
   },
   plugins: [],

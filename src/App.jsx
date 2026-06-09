@@ -1,22 +1,27 @@
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { WelcomePage } from './pages/WelcomePage/welcome.jsx'
-import { LoginPage } from './pages/Login/login.jsx'
-import { RoleSelectionPage } from './pages/RoleSelection/roleSelection.jsx'
-import { SignUpPage } from './pages/SignUp/signUp.jsx'
-import { ForgotPassword } from "./components/ForgotPassword";
+import { Routes, Route } from 'react-router-dom'
+import Landing from './pages/LandingPage/Landing'
+import { LoginPage } from './pages/LoginPage/Login'
+import { SignUpPage } from './pages/SignUpPage/SignUp'
+import { RoleSelectionPage } from './pages/RoleSelectionPage/RoleSelection'
+import { WelcomePage } from './pages/WelcomePage/Welcome'
+import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
+import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
+import { PreferencesPage } from './pages/PreferencePage/Preferences'
+import { SuccessPage } from './pages/SucessPage/Success'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/role" element={<RoleSelectionPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/welcome" element={<WelcomePage />} />
+      <Route path="/role" element={<RoleSelectionPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/verify-otp" element={<VerifyOtpPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/preferences" element={<PreferencesPage />} />
+      <Route path="/success" element={<SuccessPage />} />
+    </Routes>
   )
 }
 
