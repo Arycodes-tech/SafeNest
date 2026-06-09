@@ -8,19 +8,41 @@ import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
 import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
 import { PreferencesPage } from './pages/PreferencePage/Preferences'
 import { SuccessPage } from './pages/SucessPage/Success'
+import CompleteProfile from './pages/VerificationFlow/CompleteProfile'
+import VerifyIdentity from './pages/VerificationFlow/VerifyIdentity'
+import ReviewInfo from './pages/VerificationFlow/ReviewInfo'
+import FaceVerification from './pages/VerificationFlow/FaceVerification'
+import FaceSuccess from './pages/VerificationFlow/FaceSuccess'
+import VerificationSubmitted from './pages/VerificationFlow/VerificationSubmitted'
+import VerificationInProgress from './pages/VerificationFlow/VerificationInProgress'
+import VerificationApproved from './pages/VerificationFlow/VerificationApproved'
+import VerificationRejected from './pages/VerificationFlow/VerificationRejected'
+import VerificationPending from './pages/VerificationFlow/VerificationPending'
+import WelcomeLandlord from './pages/VerificationFlow/WelcomeLandlord'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/welcome" element={<WelcomePage />} />
-      <Route path="/role" element={<RoleSelectionPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/role" element={<RoleSelectionPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
       <Route path="/verify-otp" element={<VerifyOtpPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/preferences" element={<PreferencesPage />} />
       <Route path="/success" element={<SuccessPage />} />
+      <Route path="/verification/complete-profile" element={<CompleteProfile />}/>
+      <Route path="/verification/verify-identity" element={<VerifyIdentity />} />
+      <Route path="/verification/review-info" element={<ReviewInfo />} />
+      <Route path="/verification/face-verification" element={<FaceVerification />} />
+      <Route path="/verification/face-success" element={<FaceSuccess />} />
+      <Route path="/verification/submitted"element={<VerificationSubmitted />}/>
+      <Route path="/verification/in-progress" element={<VerificationInProgress />}/>
+      <Route path="/verification/approved" element={<VerificationApproved />} />
+      <Route path="/verification/rejected" element={<VerificationRejected />} />
+      <Route path="/verification/pending" element={<VerificationPending />} />
+      <Route path="/verification/welcome" element={<WelcomeLandlord />} />
     </Routes>
   )
 }
