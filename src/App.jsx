@@ -8,6 +8,7 @@ import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
 import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
 import { PreferencesPage } from './pages/PreferencePage/Preferences'
 import { SuccessPage } from './pages/SucessPage/Success'
+import { HomePage } from './pages/HomePage/Home'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/preferences" element={<PreferencesPage />} />
       <Route path="/success" element={<SuccessPage />} />
+      <Route path="/home" element={<HomePage />} />
     </Routes>
   )
 }
