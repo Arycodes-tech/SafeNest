@@ -8,7 +8,17 @@ import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
 import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
 import { PreferencesPage } from './pages/PreferencePage/Preferences'
 import { SuccessPage } from './pages/SucessPage/Success'
-import { HomePage } from './pages/HomePage/Home'
+import CompleteProfile from './pages/VerificationFlow/CompleteProfile'
+import VerifyIdentity from './pages/VerificationFlow/VerifyIdentity'
+import ReviewInfo from './pages/VerificationFlow/ReviewInfo'
+import FaceVerification from './pages/VerificationFlow/FaceVerification'
+import FaceSuccess from './pages/VerificationFlow/FaceSuccess'
+import VerificationSubmitted from './pages/VerificationFlow/VerificationSubmitted'
+import VerificationInProgress from './pages/VerificationFlow/VerificationInProgress'
+import VerificationApproved from './pages/VerificationFlow/VerificationApproved'
+import VerificationRejected from './pages/VerificationFlow/VerificationRejected'
+import VerificationPending from './pages/VerificationFlow/VerificationPending'
+import WelcomeLandlord from './pages/VerificationFlow/WelcomeLandlord'
 
 function App() {
   return (
@@ -22,7 +32,6 @@ function App() {
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/preferences" element={<PreferencesPage />} />
       <Route path="/success" element={<SuccessPage />} />
-      <Route path="/home" element={<HomePage />} />
     </Routes>
   )
 }
