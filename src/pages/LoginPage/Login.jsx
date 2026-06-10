@@ -17,7 +17,7 @@ export const LoginPage = () => {
     }
     setError('')
     alert('Login successful (demo)')
-    navigate('/')
+    navigate('/HomePage')
   }
 
   const handleGoogleLogin = () => {
