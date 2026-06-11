@@ -53,7 +53,7 @@ export const PreferencesPage = () => {
     navigate('/Success')
   }
 
-  const handleSkip = () => navigate('/Success')
+  const handleSkip = () => navigate('/homepage')
 
   return (
     <div className="min-h-screen bg-white flex">

@@ -5,13 +5,6 @@ import { Input } from '../../components/ui/Input'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
-  const role = localStorage.getItem('signupRole')
-
-  if (!role) {
-    navigate('/role')
-    return null
-  }
-
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -21,17 +14,70 @@ export const SignUpPage = () => {
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [errors, setErrors] = useState({})
 
+  const role = localStorage.getItem('signupRole')
+
+  if (!role) {
+    navigate('/role')
+    return null
+  }
+
+  const handlePhoneChange = (e) => {
+    const digitsOnly = e.target.value.replace(/\D/g, '')
+    setPhone(digitsOnly)
+  }
+
+  const isValidEmail = (value) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(value)
+  }
+
+  const isStrongPassword = (value) => {
+    if (value.length < 8) return false
+    if (!/[A-Z]/.test(value)) return false
+    if (!/[a-z]/.test(value)) return false
+    if (!/[0-9]/.test(value)) return false
+    return true
+  }
+
   const handleSignUp = () => {
     const newErrors = {}
-    if (!fullName.trim()) newErrors.fullName = 'Full name is required'
-    if (!email.trim()) newErrors.email = 'Email is required'
-    if (!phone.trim()) newErrors.phone = 'Phone number is required'
-    if (!password) newErrors.password = 'Password is required'
-    if (password !== confirmPassword)
+
+    if (!fullName.trim()) {
+      newErrors.fullName = 'Full name is required'
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!isValidEmail(email)) {
+      newErrors.email = 'Enter a valid email address (e.g. user@email.com)'
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Phone number is required'
+    } else if (phone.length < 10) {
+      newErrors.phone = 'Enter a valid phone number (at least 10 digits)'
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required'
+    } else if (!isStrongPassword(password)) {
+      newErrors.password =
+        'Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character'
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password'
+    } else if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
-    if (role === 'agent' && !agencyName.trim())
+    }
+
+    if (role === 'agent' && !agencyName.trim()) {
       newErrors.agencyName = 'Agency name is required'
-    if (!agreeTerms) newErrors.agreeTerms = 'You must agree to the terms'
+    }
+
+    if (!agreeTerms) {
+      newErrors.agreeTerms = 'You must agree to the terms'
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
@@ -49,7 +95,6 @@ export const SignUpPage = () => {
       agreeTerms,
       role,
     })
-    alert('Signup successful!')
   }
 
   return (
@@ -81,9 +126,10 @@ export const SignUpPage = () => {
           <Input
             label="Phone Number"
             type="tel"
+            inputMode="numeric"
             placeholder="Enter your phone number"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={handlePhoneChange}
             error={errors.phone}
           />
           <Input
