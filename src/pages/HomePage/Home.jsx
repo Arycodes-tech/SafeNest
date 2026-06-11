@@ -29,21 +29,21 @@ const QUICK_LINKS = [
   {
     label: 'Rent Homes',
     icon: <FaHome className="text-xl" />,
-    path: '/rent-homes',
+    path: '/browse/properties',
     bgColor: 'bg-[#D1DFEF]',
     iconColor: 'text-[#1E3ABA]',
   },
   {
     label: 'Find Rooms',
     icon: <FaBed className="text-xl" />,
-    path: '/find-rooms',
+    path: '/browse/properties',
     bgColor: 'bg-[#E2CFED]',
     iconColor: 'text-[#8D41BA]',
   },
   {
     label: 'Nearby Places',
     icon: <FaMapMarkerAlt className="text-xl" />,
-    path: '/nearby',
+    path: '/browse/properties',
     bgColor: 'bg-[#CEEBD9]',
     iconColor: 'text-[#16A34A]',
   },
@@ -122,7 +122,6 @@ const POPULAR_LOCATIONS = [
   {
     name: 'Victoria Island',
     count: '800+',
-
     imageUrl:
       'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781104559/Frame_291_dlnxor.jpg',
   },
@@ -133,6 +132,7 @@ const POPULAR_LOCATIONS = [
       'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781104558/Frame_292_sdk1gg.jpg',
   },
 ]
+
 const TOP_AGENTS = [
   {
     name: 'Alexa Johnson',
@@ -179,19 +179,22 @@ export const HomePage = () => {
   const navigate = useNavigate()
 
   const user = {
-    name: 'Olamide',
+    name: 'Bayo',
     avatarCloudId: 'user-avatar',
-    notificationCount: 3,
+    notificationCount: 0,
     location: 'Lagos, Nigeria',
   }
 
   const [savedListings, setSavedListings] = useState([])
 
+  const [notificationCount, setNotificationCount] = useState(
+    user.notificationCount
+  )
+
   const toggleSave = (id) => {
     setSavedListings((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     )
-    const [notificationCount, setNotificationCount] = useState(0)
   }
 
   return (
@@ -207,16 +210,15 @@ export const HomePage = () => {
             <FaChevronDown className="w-5 h-5" />
           </button>
 
-          {/* notofication bell and profile */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/notifications')}
               className="relative bg-background-hover rounded-full p-2 text-text-secondary"
             >
               <FaBell className="w-5 h-5 bg-[#DDECFD]" />
-              {user.notificationCount > 0 && (
+              {notificationCount > 0 && (
                 <span className="absolute -top-1 -right-2 bg-error text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {user.notificationCount}
+                  {notificationCount}
                 </span>
               )}
             </button>
@@ -231,7 +233,6 @@ export const HomePage = () => {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="max-w-2xl mx-auto px-4 pb-8">
         <div className="mt-5 mb-4">
           <h1 className="text-h2 text-text-primary font-bold">
@@ -242,7 +243,6 @@ export const HomePage = () => {
           </p>
         </div>
 
-        {/* Search bar */}
         <div className="flex items-center gap-2 mb-5">
           <div className="flex-1 flex items-center gap-2 bg-background-primary border border-border rounded-xl px-3 py-3 shadow-sm">
             <FaSearch className="w-5 h-5 text-text-tertiary" />
@@ -254,13 +254,12 @@ export const HomePage = () => {
           </div>
           <button
             className="bg-primary text-white rounded-xl p-3 flex items-center justify-center shadow-sm"
-            onClick={() => navigate('/search')}
+            onClick={() => navigate('/browse')}
           >
             <FaArrowRight className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Hero banner */}
         <div className="relative bg-[#ACC5FD] rounded-2xl overflow-hidden mb-5 min-h-[180px] flex items-center">
           <div className="flex-1 p-5 ">
             <h2 className="text-black font-bold text-xl leading-tight mb-3 md:text-h2">
@@ -291,12 +290,11 @@ export const HomePage = () => {
           <div className="w-[140px] h-[180px] flex-shrink-0">
             <img
               src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781095664/3d-rendering-house-model-removebg-preview_1_f5qisp.jpg"
-              alt="Hero property"
+              alt="Hero img"
               className="w-full h-full object-cover"
             />
           </div>
 
-          {/*  indicators */}
           <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
             <span className="w-3 h-3 rounded-full bg-[#1E3ABA]" />
             <span className="w-3 h-3 rounded-full bg-white/40" />
@@ -304,7 +302,6 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {/*links */}
         <div className="bg-background-primary rounded-2xl px-4 py-4 mb-6 shadow-card">
           <div className="flex justify-between">
             {QUICK_LINKS.map((link) => (
@@ -326,14 +323,13 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {/* Verified Listings (horizontal scroll) */}
         <section className="mb-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-h2 text-text-primary font-bold">
               Verified Listings
             </h2>
             <button
-              onClick={() => navigate('/listings')}
+              onClick={() => navigate('/browse/properties')}
               className="text-primary text-small font-medium flex items-center gap-0.5"
             >
               see all <FaArrowRight className="w-3 h-3" />
@@ -359,6 +355,7 @@ export const HomePage = () => {
                     </span>
                   )}
                   <button
+                    type="button"
                     className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow"
                     onClick={(e) => {
                       e.stopPropagation()
@@ -401,7 +398,6 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* Safety banner */}
         <div className="bg-[#ACC5FD] border border-border rounded-2xl p-4 flex items-center gap-4 mb-6">
           <FaShieldAlt className="w-10 h-10 text-primary" />
           <div className="flex-1">
@@ -420,14 +416,13 @@ export const HomePage = () => {
           </button>
         </div>
 
-        {/* Continue Your Search */}
         <section className="mb-6 ">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-h2 text-text-primary font-bold">
               Continue Your Search
             </h2>
             <button
-              onClick={() => navigate('/search')}
+              onClick={() => navigate('/browse/properties')}
               className="text-primary text-small font-bold flex items-center gap-0.5"
             >
               see all <FaArrowRight className="w-3 h-3" />
@@ -452,7 +447,6 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* Popular Locations */}
         <section className="mb-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-h2 text-text-primary font-bold">
@@ -494,7 +488,6 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* Top Agents */}
         <section className="mb-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-h2 text-black font-extrabold">Top Agents</h2>
@@ -533,6 +526,7 @@ export const HomePage = () => {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() =>
                     navigate(
                       `/chat/${agent.name.toLowerCase().replace(/\s/g, '-')}`
@@ -547,7 +541,6 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* How It Works */}
         <section className="mb-6">
           <h2 className="text-h2 text-black font-bold mb-4">How Its Works</h2>
           <div className="flex justify-between">

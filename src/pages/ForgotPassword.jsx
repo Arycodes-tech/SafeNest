@@ -28,7 +28,7 @@ function ForgotPassword() {
           <input
             type="email"
             id="email"
-            placeholder="olamidekanaruwi90@gmail.com"
+            placeholder="Enter Your Email"
             className="w-full p-4 border border-gray-300 rounded-lg mb-8
                       focus:outline-none focus:ring-2 focus:ring-[#2F45D3]"
           />
@@ -50,7 +50,7 @@ function ForgotPassword() {
         </a>
       </div>
     </div>
-  );
+  )
 }
 
-export default ForgotPassword;
+export default ForgotPassword

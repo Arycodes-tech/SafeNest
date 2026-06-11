@@ -46,7 +46,7 @@ export const SuccessPage = () => {
             <Button
               variant="primary"
               fullWidth
-              onClick={() => navigate('/listings')}
+              onClick={() => navigate('/homepage')}
             >
               Explore Listings
             </Button>

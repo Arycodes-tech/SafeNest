@@ -50,14 +50,14 @@ export const VerifyOtpPage = () => {
       setError('Please enter the 6-digit code')
       return
     }
-    alert('OTP verified (demo)')
+    alert('OTP verified ')
 
     const role = localStorage.getItem('signupRole')
 
     if (role === 'renter') {
       navigate('/preferences', { state: { email, phone: phoneNumber } })
     } else {
-      navigate('/dashboard')
+      navigate('/verification/complete-profile')
     }
   }
   const isOtpComplete = otp.every((digit) => digit !== '')

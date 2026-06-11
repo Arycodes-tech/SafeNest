@@ -9,19 +9,40 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setError('Please fill in both fields')
       return
     }
     setError('')
-    alert('Login successful (demo)')
-    navigate('/HomePage')
+    setLoading(true)
+
+    try {
+      const response = await fetch('http://localhost:5001/api/v1/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await response.json()
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        navigate('/homepage')
+      } else {
+        setError(data.message || 'Invalid email or password')
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleGoogleLogin = () => {
-    alert('Google login (demo)')
+    alert('Google login (demo) – not integrated yet')
   }
 
   return (
@@ -49,15 +70,24 @@ export const LoginPage = () => {
           />
 
           <div className="text-right">
-            <button className="text-sm text-primary underline">
+            <button
+              onClick={() => navigate('/Reset')}
+              className="text-sm text-primary underline"
+            >
               Forgot password?
             </button>
           </div>
 
           {error && <p className="text-sm text-error">{error}</p>}
 
-          <Button variant="primary" fullWidth onClick={handleLogin}>
-            Log In
+          <Button
+            variant="primary"
+            fullWidth
+            onClick={handleLogin}
+            disabled={loading}
+            className={loading ? 'opacity-50 cursor-not-allowed' : ''}
+          >
+            {loading ? 'Logging in...' : 'Log In'}
           </Button>
 
           <div className="relative my-2">
