@@ -14,6 +14,28 @@ import Profile from './pages/ProfilePage/ProfilePage'
 import RequestToRent from './pages/RequestToRent/RequestToRent'
 import RequestToRentReview from './pages/RequestToRentReview/RequestToRentReview'
 
+import CompleteProfile from './pages/VerificationFlow/CompleteProfile'
+import VerifyIdentity from './pages/VerificationFlow/VerifyIdentity'
+import ReviewInfo from './pages/VerificationFlow/ReviewInfo'
+import FaceVerification from './pages/VerificationFlow/FaceVerification'
+import FaceSuccess from './pages/VerificationFlow/FaceSuccess'
+import VerificationSubmitted from './pages/VerificationFlow/VerificationSubmitted'
+import VerificationInProgress from './pages/VerificationFlow/VerificationInProgress'
+import VerificationApproved from './pages/VerificationFlow/VerificationApproved'
+import VerificationRejected from './pages/VerificationFlow/VerificationRejected'
+import VerificationPending from './pages/VerificationFlow/VerificationPending'
+import WelcomeLandlord from './pages/VerificationFlow/WelcomeLandlord'
+import { HomePage } from './pages/HomePage/Home'
+import VerifiedListings from './pages/VerifiedListingsPage/VerifiedListings'
+import SavedListings from './pages/SavedListingsPage/SavedListings'
+
+import { FilterPanel } from './pages/FilterPanelPage/FilterPanel'
+import ResetPassword from './pages/Reset'
+import { BrowsePropertiesPage } from './pages/BrowsePropertiespage/BrowseProperties'
+import { PropertyDetailsPage } from './pages/BrowsePropertiespage/PropertyDetails'
+import { RequestToRentPage } from './pages/BrowsePropertiespage/RequestToRent'
+import { ReportScamPage } from './pages/ReportScamPage/ReportScam'
+
 function App() {
   return (
     <Routes>
@@ -30,6 +52,34 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/request-to-rent" element={<RequestToRent />} />
       <Route path="/request-to-rent/review" element={<RequestToRentReview />} />
+
+      <Route
+        path="/verification/complete-profile"
+        element={<CompleteProfile />}
+      />
+      <Route
+        path="/verification/verify-identity"
+        element={<VerifyIdentity />}
+      />
+      <Route path="/verification/review-info" element={<ReviewInfo />} />
+      <Route
+        path="/verification/face-verification"
+        element={<FaceVerification />}
+      />
+      <Route path="/verification/face-success" element={<FaceSuccess />} />
+      <Route
+        path="/verification/submitted"
+        element={<VerificationSubmitted />}
+      />
+      <Route
+        path="/verification/in-progress"
+        element={<VerificationInProgress />}
+      />
+      <Route path="/verification/approved" element={<VerificationApproved />} />
+      <Route path="/verification/rejected" element={<VerificationRejected />} />
+      <Route path="/verification/pending" element={<VerificationPending />} />
+      <Route path="/verification/welcome" element={<WelcomeLandlord />} />
+      <Route path="/HomePage" element={<HomePage />} />
     </Routes>
   )
 }
