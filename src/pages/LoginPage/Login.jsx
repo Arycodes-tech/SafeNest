@@ -49,9 +49,11 @@ export const LoginPage = () => {
           />
 
           <div className="text-right">
-            <button className="text-sm text-primary underline">
-              Forgot password?
-            </button>
+           <button
+  onClick={() => navigate('/forgot-password')}
+  className="text-sm text-primary underline">
+  Forgot password?
+</button>
           </div>
 
           {error && <p className="text-sm text-error">{error}</p>}
