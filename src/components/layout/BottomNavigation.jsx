@@ -7,7 +7,7 @@ export const BottomNavigation = () => {
   const location = useLocation()
 
   const tabs = [
-    { name: 'Home', icon: <FaHome className="text-xl" />, path: '/HomePage' },
+    { name: 'Home', icon: <FaHome className="text-xl" />, path: '/home' },
     { name: 'Saved', icon: <FaBookmark className="text-xl" />, path: '/saved' },
     {
       name: 'Messages',
