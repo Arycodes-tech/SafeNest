@@ -20,6 +20,9 @@ import VerificationRejected from './pages/VerificationFlow/VerificationRejected'
 import VerificationPending from './pages/VerificationFlow/VerificationPending'
 import WelcomeLandlord from './pages/VerificationFlow/WelcomeLandlord'
 import { HomePage } from './pages/HomePage/Home'
+import VerifiedListings from './pages/VerifiedListingsPage/VerifiedListings'
+import SavedListings from './pages/SavedListingsPage/SavedListings'
+
 import { FilterPanel } from './pages/FilterPanelPage/FilterPanel'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/Reset'
@@ -66,14 +69,7 @@ function App() {
       <Route path="/verification/rejected" element={<VerificationRejected />} />
       <Route path="/verification/pending" element={<VerificationPending />} />
       <Route path="/verification/welcome" element={<WelcomeLandlord />} />
-      <Route path="/homepage" element={<HomePage />} />
-      <Route path="/filter" element={<FilterPanel />} />
-      <Route path="/forgot/password" element={<ForgotPassword />} />
-      <Route path="/reset/password" element={<ResetPassword />} />
-      <Route path="/browse/properties" element={<BrowsePropertiesPage />} />
-      <Route path="/listing/:id" element={<PropertyDetailsPage />} />
-      <Route path="/request-to-rent/:id" element={<RequestToRentPage />} />
-      <Route path="/report-scam" element={<ReportScamPage />} />
+      <Route path="/HomePage" element={<HomePage />} />
     </Routes>
   )
 }
