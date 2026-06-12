@@ -55,7 +55,6 @@ export const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-background-secondary pb-20">
-      {/* Header */}
       <div className="bg-white px-4 pt-10 text-center pb-4 border-b border-border">
         <h1 className="text-h1 font-bold text-text-primary">Profile</h1>
       </div>

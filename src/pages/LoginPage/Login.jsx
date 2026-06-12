@@ -120,12 +120,12 @@ export const LoginPage = () => {
             </div>
           </div>
 
-          <div className="text-right -mt-2">
+          <div className="text-right  -mt-2">
             <button
               onClick={() => navigate('/reset/password')}
               className="text-sm text-white/80 hover:text-white"
               onClick={() => navigate('/forgot/password')}
-              className="text-sm text-primary underline"
+              className="text-sm text-white font-bold underline"
             >
               Forgot password?
             </button>

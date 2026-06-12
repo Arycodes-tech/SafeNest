@@ -9,11 +9,7 @@ import { VerifyOtpPage } from './pages/VerifyOtpPage/VerifyOtp'
 import { VerifyEmailPage } from './pages/VerifyEmailPage/VerifyEmail'
 import { PreferencesPage } from './pages/PreferencePage/Preferences'
 import { SuccessPage } from './pages/SucessPage/Success'
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import Profile from './pages/ProfilePage/ProfilePage'
-import RequestToRent from './pages/RequestToRent/RequestToRent'
-import RequestToRentReview from './pages/RequestToRentReview/RequestToRentReview'
-
 import CompleteProfile from './pages/VerificationFlow/CompleteProfile'
 import VerifyIdentity from './pages/VerificationFlow/VerifyIdentity'
 import ReviewInfo from './pages/VerificationFlow/ReviewInfo'
@@ -40,6 +36,8 @@ import { VerifyPropertyOwnership } from './pages/VerifyPropertiesListing'
 import { MessagesList } from './pages/chatscreen'
 import { ChatConversation } from './pages/ChatConversation'
 import { ProfilePage } from './pages/ProfilePage/LandordProfile'
+import RenterProfilePage from './pages/ProfilePage/ProfilePage'
+import ReviewAndSubmitPage from './pages/BrowsePropertiespage/RequestToRentReview'
 
 function App() {
   return (
@@ -55,8 +53,7 @@ function App() {
       <Route path="/preferences" element={<PreferencesPage />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/request-to-rent" element={<RequestToRent />} />
-      <Route path="/request-to-rent/review" element={<RequestToRentReview />} />
+      <Route path="/request-to-rent/review" element={<ReviewAndSubmitPage />} />
 
       <Route
         path="/verification/complete-profile"
@@ -100,6 +97,8 @@ function App() {
       <Route path="/messages" element={<MessagesList />} />
       <Route path="/messages/:id" element={<ChatConversation />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/renter/profile" element={<RenterProfilePage />} />
+      <Route path="/review/submit" element={<ReviewAndSubmitPage />} />
     </Routes>
   )
 }

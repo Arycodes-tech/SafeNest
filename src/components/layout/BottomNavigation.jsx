@@ -17,28 +17,42 @@ export const BottomNavigation = () => {
     return '/dashboard'
   }
 
+  const getProfilePath = () => {
+    if (userRole === 'renter') return '/renter/profile'
+    return '/profile'
+  }
+
+  if (!userRole) return null
+
   const tabs = [
-    {
-      name: 'Home',
-      icon: <FaHome className="text-xl" />,
-      path: getHomePath(),
-    },
+    { name: 'Home', icon: <FaHome className="text-xl" />, path: getHomePath() },
     { name: 'Saved', icon: <FaBookmark className="text-xl" />, path: '/saved' },
     {
       name: 'Messages',
       icon: <FaEnvelope className="text-xl" />,
       path: '/messages',
     },
-    { name: 'Profile', icon: <FaUser className="text-xl" />, path: '/profile' },
+    {
+      name: 'Profile',
+      icon: <FaUser className="text-xl" />,
+      path: getProfilePath(),
+    },
   ]
 
   const isActive = (path) => {
-    if (path === '/homepage' || path === '/dashboard/landlord') {
+    if (path === '/homepage' || path === '/dashboard') {
       return (
-        location.pathname === '/homepage' ||
-        location.pathname === '/dashboard/landlord'
+        location.pathname === '/homepage' || location.pathname === '/dashboard'
       )
     }
+
+    if (path === '/renter/profile' || path === '/profile') {
+      return (
+        location.pathname === '/renter/profile' ||
+        location.pathname === '/profile'
+      )
+    }
+
     return location.pathname.startsWith(path)
   }
 
