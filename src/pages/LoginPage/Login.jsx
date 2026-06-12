@@ -124,6 +124,8 @@ export const LoginPage = () => {
             <button
               onClick={() => navigate('/reset/password')}
               className="text-sm text-white/80 hover:text-white"
+              onClick={() => navigate('/forgot/password')}
+              className="text-sm text-primary underline"
             >
               Forgot password?
             </button>

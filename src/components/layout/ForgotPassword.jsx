@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom'
 function ForgotPassword() {
+  const navigate = useNavigate()
   return (
     <div className="bg-[#F8F9FC] min-h-screen flex justify-center">
       <div className="w-full max-w-md px-6 pt-10 text-center">
@@ -42,12 +44,12 @@ function ForgotPassword() {
           </button>
         </form>
 
-        <a
-          href="/login"
-          className="inline-block mt-8 text-[#2F45D3] font-semibold"
-        >
-          Back to Sign In
-        </a>
+        <button
+  onClick={() => navigate('/login')}
+  className="inline-block mt-8 text-[#2F45D3] font-semibold"
+>
+  Back to Sign In
+</button>
       </div>
     </div>
   );
