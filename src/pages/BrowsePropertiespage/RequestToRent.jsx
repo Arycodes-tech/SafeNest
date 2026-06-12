@@ -184,13 +184,21 @@ export const RequestToRentPage = () => {
 
   function handleContinue() {
     if (!isFormValid) return
-    navigate('/rent-confirmation', {
+    navigate('/review/submit', {
       state: {
-        listingId: listing?.id,
         moveInDate,
         duration,
         referral,
         message,
+        property: {
+          title: listing.title,
+          location: listing.location,
+          price: listing.price,
+          beds: listing.beds,
+          baths: listing.baths,
+          sqm: listing.size,
+          imageUrl: listing.image,
+        },
       },
     })
   }
