@@ -1,132 +1,148 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { FaCheckCircle, FaTimesCircle, FaArrowLeft } from 'react-icons/fa'
 
-export default function ResetPasswordPage() {
-  const [email, setEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState('')
+const ResetPasswordPage = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const token = queryParams.get('token')
 
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  const isButtonDisabled = !email || !isValidEmail || isLoading
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [checks, setChecks] = useState({
+    length: false,
+    number: false,
+    uppercase: false,
+    special: false,
+  })
+
+  useEffect(() => {
+    setChecks({
+      length: newPassword.length >= 8,
+      number: /\d/.test(newPassword),
+      uppercase: /[A-Z]/.test(newPassword),
+      special: /[^A-Za-z0-9]/.test(newPassword),
+    })
+  }, [newPassword])
+
+  const validateForm = () => {
+    const newErrors = {}
+    if (!newPassword) newErrors.newPassword = 'Password is required'
+    else if (
+      !checks.length ||
+      !checks.number ||
+      !checks.uppercase ||
+      !checks.special
+    ) {
+      newErrors.newPassword = 'Password does not meet all requirements'
+    }
+    if (!confirmPassword)
+      newErrors.confirmPassword = 'Please confirm your password'
+    else if (newPassword !== confirmPassword)
+      newErrors.confirmPassword = 'Passwords do not match'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    if (!validateForm()) return
+    setIsSubmitting(true)
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setIsSuccess(true)
-    } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    alert('Password reset successful. Please log in.')
+    navigate('/login')
+    setIsSubmitting(false)
   }
 
+  const CheckItem = ({ met, label }) => (
+    <li className="flex items-center gap-2 text-sm">
+      {met ? (
+        <FaCheckCircle className="text-success w-4 h-4" />
+      ) : (
+        <FaTimesCircle className="text-error w-4 h-4" />
+      )}
+      <span className={met ? 'text-text-secondary' : 'text-text-tertiary'}>
+        {label}
+      </span>
+    </li>
+  )
+
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex flex-col px-6 pt-12 pb-8 max-w-sm mx-auto">
-        <div className="flex justify-center mb-8 mt-4">
-          <img
-            src="https://res.cloudinary.com/dlldm26g7/image/upload/v1780846615/ChatGPT_Image_May_27_2026_11_20_05_AM_1_mhv1ba.svg"
-            alt="Forgot Password Illustration"
-            className="w-64 h-48 object-contain"
-          />
-        </div>
-
-        {!isSuccess ? (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 text-center mb-3">
-              Forgot Password?
-            </h1>
-            <p className="text-gray-500 text-center text-sm mb-8 leading-relaxed">
-              Enter your email address and we'll send you a link to reset your
-              password
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-900 mb-2"
-                >
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-base"
-                  placeholder="Enter your email address"
-                />
-              </div>
-
-              {error && (
-                <p className="text-red-500 text-sm text-center">{error}</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={isButtonDisabled}
-                className={`w-full rounded-xl px-4 py-4 text-white font-semibold text-base transition-colors ${
-                  isButtonDisabled
-                    ? 'bg-gray-300 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-              >
-                {isLoading ? 'Sending...' : 'Send reset link'}
-              </button>
-            </form>
-
-            <div className="text-center mt-6">
-              <a
-                href="/login"
-                className="text-blue-600 font-semibold text-base"
-              >
-                Back to Sign in
-              </a>
-            </div>
-          </>
-        ) : (
-          <div className="text-center mt-8">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
-              <svg
-                className="h-8 w-8 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">
-              Check your email
-            </h3>
-            <p className="text-gray-500 text-sm mb-6">
-              We sent a reset link to{' '}
-              <span className="font-semibold text-gray-900">{email}</span>
-            </p>
-            <button
-              onClick={() => {
-                setIsSuccess(false)
-                setEmail('')
-              }}
-              className="text-sm font-medium text-gray-600 hover:text-gray-500"
-            >
-              Didn't receive it? Try again
-            </button>
+    <div className="min-h-screen bg-background-primary flex items-center justify-center px-4 py-8">
+      <div className="max-w-md w-full">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-1 text-text-tertiary hover:text-primary mb-6"
+        >
+          <FaArrowLeft size={14} /> <span>Back</span>
+        </button>
+        <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
+          Create New Password
+        </h1>
+        <p className="text-sm text-text-secondary mb-6">
+          Your new password must be different from old password.
+        </p>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-text-primary mb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter new password"
+              className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-primary"
+            />
+            <ul className="mt-3 space-y-1">
+              <CheckItem met={checks.length} label="At least 8 characters" />
+              <CheckItem met={checks.number} label="Includes a number" />
+              <CheckItem
+                met={checks.uppercase}
+                label="Includes an uppercase letter"
+              />
+              <CheckItem
+                met={checks.special}
+                label="Includes a special character"
+              />
+            </ul>
+            {errors.newPassword && (
+              <p className="text-xs text-error mt-1">{errors.newPassword}</p>
+            )}
           </div>
-        )}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-text-primary mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm new password"
+              className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-primary"
+            />
+            {errors.confirmPassword && (
+              <p className="text-xs text-error mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`w-full bg-primary text-white font-semibold py-3 rounded-xl transition ${isSubmitting ? 'opacity-70' : 'hover:opacity-90'}`}
+          >
+            {isSubmitting ? 'Resetting...' : 'Reset Password'}
+          </button>
+        </form>
       </div>
     </div>
   )
 }
+
+export default ResetPasswordPage

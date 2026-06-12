@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Input } from '../../components/ui/Input'
 import { HiShieldCheck } from 'react-icons/hi'
 
+const BASE_URL = 'http://localhost:5000/api/v1'
+
 export const SignUpPage = () => {
   const navigate = useNavigate()
 
@@ -50,7 +52,6 @@ export const SignUpPage = () => {
   const handleSignUp = async () => {
     const newErrors = {}
 
-    // --- validation (same as before) ---
     if (!fullName.trim()) newErrors.fullName = 'Full name is required'
     if (!email.trim()) {
       newErrors.email = 'Email is required'
@@ -82,32 +83,15 @@ export const SignUpPage = () => {
       setErrors(newErrors)
       return
     }
-
     setIsLoading(true)
     setApiError('')
 
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    const mockUser = {
-      fullName,
-      email,
-      phone,
-      role,
-      agencyName: role === 'agent' ? agencyName : undefined,
-      agreeTerms,
-    }
-    localStorage.setItem('user', JSON.stringify(mockUser))
-    localStorage.setItem('authToken', 'demo-token-456')
-
-    navigate('/verify-otp', { state: { phone, email } })
-    setIsLoading(false)
-    return
-
-    // BACKEND CODE
-    /*
     try {
-      const response = await fetch('http://localhost:5001/api/v1/users/register', {
+      const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           name: fullName,
           email: email,
@@ -116,28 +100,26 @@ export const SignUpPage = () => {
         }),
       })
       const data = await response.json()
-
       if (!response.ok) {
         setApiError(data.message || 'Something went wrong. Please try again.')
         return
       }
-
       if (data.token) {
         localStorage.setItem('authToken', data.token)
       }
-
+      if (data.data?.user) {
+        localStorage.setItem('user', JSON.stringify(data.data.user))
+      }
       navigate('/verify-otp', { state: { phone, email } })
     } catch (error) {
-      setApiError('Network error. Check your connection and try again.')
+      setApiError('Cannot connect to server. Make sure the backend is running.')
     } finally {
       setIsLoading(false)
     }
-    */
   }
 
   return (
     <div className="min-h-screen bg-white grid grid-cols-1 md:grid-cols-2">
-      {/* Left column – illustration (desktop only) */}
       <div className="hidden md:flex flex-col justify-between p-8 bg-background-secondary min-h-screen">
         <div className="flex items-center gap-2">
           <img
@@ -161,7 +143,6 @@ export const SignUpPage = () => {
         <div className="h-9" />
       </div>
 
-      {/* Right column – form */}
       <div className="flex items-center justify-center px-6 py-12">
         <div className="max-w-md w-full">
           <h1 className="text-3xl font-bold text-text-primary mb-1">

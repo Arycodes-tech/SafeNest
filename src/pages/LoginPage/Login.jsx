@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
-import { Button } from '../../components/ui/Button'
-import { Input } from '../../components/ui/Input'
 import { FcGoogle } from 'react-icons/fc'
+
+const BASE_URL = 'http://localhost:5000/api/v1'
 
 export const LoginPage = () => {
   const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -16,19 +17,50 @@ export const LoginPage = () => {
       setError('Please fill in both fields')
       return
     }
+
     setError('')
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    const mockUser = {
-      name: 'Olamide',
-      email,
-      role: 'renter',
-      avatarUrl: 'https://randomuser.me/api/portraits/lego/1.jpg',
+
+    try {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.message || 'Incorrect email or password. Try again.')
+        return
+      }
+      if (data.token) {
+        localStorage.setItem('authToken', data.token)
+      }
+
+      if (data.data?.user) {
+        localStorage.setItem('user', JSON.stringify(data.data.user))
+      }
+
+      const userRole = data.data?.user?.role
+
+      if (userRole === 'renter') {
+        navigate('/homepage')
+      } else if (userRole === 'agent' || userRole === 'landlord') {
+        navigate('/dashboard')
+      } else {
+        navigate('/homepage')
+      }
+    } catch (err) {
+      setError('Cannot connect to server. Make sure the backend is running.')
+    } finally {
+      setLoading(false)
     }
-    localStorage.setItem('token', 'demo-token-123')
-    localStorage.setItem('user', JSON.stringify(mockUser))
-    navigate('/homepage')
-    setLoading(false)
   }
 
   const handleGoogleLogin = () => alert('Google login (demo)')
@@ -41,9 +73,7 @@ export const LoginPage = () => {
           alt="Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
-
         <div className="absolute inset-0 bg-black/50" />
-
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-16">
             <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
@@ -56,7 +86,6 @@ export const LoginPage = () => {
               Safe<span className="text-primary-light">Nest</span>
             </span>
           </div>
-
           <h1 className="text-4xl font-bold text-white leading-tight">
             Find verified properties.
             <br />
@@ -64,7 +93,6 @@ export const LoginPage = () => {
             <br />
             <span className="text-primary-light">Live confidently.</span>
           </h1>
-
           <p className="text-white/80 mt-4 text-base">
             Join thousands of people who trust SafeNest for secure and easy
             renting.
@@ -102,7 +130,6 @@ export const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-transparent border border-white/40 rounded-xl px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:border-white text-sm pr-10"
               />
-
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50">
                 <svg
                   width="18"
@@ -120,11 +147,9 @@ export const LoginPage = () => {
             </div>
           </div>
 
-          <div className="text-right  -mt-2">
+          <div className="text-right -mt-2">
             <button
               onClick={() => navigate('/reset/password')}
-              className="text-sm text-white/80 hover:text-white"
-              onClick={() => navigate('/forgot/password')}
               className="text-sm text-white font-bold underline"
             >
               Forgot password?
@@ -136,7 +161,9 @@ export const LoginPage = () => {
           <button
             onClick={handleLogin}
             disabled={loading}
-            className={`w-full bg-white text-[#2B3AE7] font-semibold py-3 rounded-xl text-sm transition-opacity ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
+            className={`w-full bg-white text-[#2B3AE7] font-semibold py-3 rounded-xl text-sm transition-opacity ${
+              loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
+            }`}
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>

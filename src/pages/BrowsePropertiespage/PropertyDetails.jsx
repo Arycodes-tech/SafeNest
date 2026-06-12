@@ -26,7 +26,8 @@ const mockListings = [
     ],
     agent: {
       name: 'Alexa Johnson',
-      avatar: 'https://i.pravatar.cc/150?img=47',
+      avatar:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_27_vlibqh.jpg',
       rating: 4.8,
       reviews: 126,
       verified: true,
@@ -49,7 +50,8 @@ const mockListings = [
     ],
     agent: {
       name: 'Tunde Bello',
-      avatar: 'https://i.pravatar.cc/150?img=12',
+      avatar:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_31_khysyg.jpg',
       rating: 4.5,
       reviews: 89,
       verified: true,
@@ -71,7 +73,8 @@ const mockListings = [
     ],
     agent: {
       name: 'Chidi Okafor',
-      avatar: 'https://i.pravatar.cc/150?img=33',
+      avatar:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_32_zq48py.png',
       rating: 4.9,
       reviews: 210,
       verified: true,

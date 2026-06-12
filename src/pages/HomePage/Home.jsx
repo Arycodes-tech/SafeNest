@@ -21,8 +21,9 @@ import {
 } from 'react-icons/fa'
 import { BottomNavigation } from '../../components/layout/BottomNavigation'
 
-const FALLBACK_IMAGE =
-  'https://res.cloudinary.com/demo/image/upload/v1312461206/placeholder.jpg'
+const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/400x300?text=No+Image'
+
+const BASE_URL = 'http://localhost:7777/api/v1'
 
 const QUICK_LINKS = [
   {
@@ -74,25 +75,25 @@ const POPULAR_LOCATIONS = [
     name: 'Lekki',
     count: '1100+',
     imageUrl:
-      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781103505/Frame_289_ggnryf.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265756/b5e42d52e44a53c418f5ba77ca2b51d5_vdb7kz.jpg',
   },
   {
     name: 'Yaba',
     count: '800+',
     imageUrl:
-      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781104309/Frame_290_mfb2ke.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265720/56e65103b9d9741631507ad6484af831_lzwndg.jpg',
   },
   {
     name: 'Victoria Island',
     count: '800+',
     imageUrl:
-      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781104559/Frame_291_dlnxor.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265806/8d61cdace22ac4c3a60ad39d236877f2_t4ggsl.jpg',
   },
   {
     name: 'Ikeja',
     count: '500+',
     imageUrl:
-      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781104558/Frame_292_sdk1gg.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265699/33a6d9ded05e80a9178d6b9fc787f880_syqijz.jpg',
   },
 ]
 
@@ -103,7 +104,7 @@ const TOP_AGENTS = [
     rating: '4.9',
     reviews: 120,
     avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar1.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_32_zq48py.png',
   },
   {
     name: 'John Akinwale',
@@ -111,7 +112,7 @@ const TOP_AGENTS = [
     rating: '4.7',
     reviews: 96,
     avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar2.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_27_vlibqh.jpg',
   },
   {
     name: 'Dariel Ibrahim',
@@ -119,7 +120,7 @@ const TOP_AGENTS = [
     rating: '4.6',
     reviews: 76,
     avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar3.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278848/Ellipse_31_khysyg.jpg',
   },
 ]
 
@@ -152,7 +153,7 @@ const FALLBACK_LISTINGS = [
     size: '120m²',
     verified: true,
     imageUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/apartment1.jpg',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80',
   },
   {
     id: 2,
@@ -164,7 +165,7 @@ const FALLBACK_LISTINGS = [
     size: '120m²',
     verified: true,
     imageUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/house1.jpg',
+      'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80',
   },
   {
     id: 3,
@@ -176,7 +177,7 @@ const FALLBACK_LISTINGS = [
     size: null,
     verified: true,
     imageUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/apartment2.jpg',
+      'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80',
   },
 ]
 
@@ -184,16 +185,14 @@ export const HomePage = () => {
   const navigate = useNavigate()
 
   const [user, setUser] = useState({
-    name: 'Bayo',
+    name: '',
     location: 'Lagos, Nigeria',
     avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1312461206/user-avatar.jpg',
+      'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781278614/Ellipse_19_qnw08k.jpg',
   })
   const [notificationCount, setNotificationCount] = useState(0)
-
   const [listings, setListings] = useState([])
   const [listingsError, setListingsError] = useState(false)
-
   const [savedListings, setSavedListings] = useState([])
 
   const toggleSave = (id) => {
@@ -205,41 +204,69 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('authToken')
-      if (!token) return
+      if (!token) {
+        navigate('/login')
+        return
+      }
       try {
-        const res = await fetch('http://localhost:5001/api/v1/users/me', {
+        const response = await fetch(`${BASE_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        if (res.ok) {
-          const data = await res.json()
-          setUser({
-            name: data.user.name || 'Bayo',
-            location: data.user.location || 'Lagos, Nigeria',
-            avatarUrl:
-              data.user.avatarUrl ||
-              'https://res.cloudinary.com/demo/image/upload/v1312461206/user-avatar.jpg',
-          })
-          setNotificationCount(data.user.unreadNotifications || 0)
+        const data = await response.json()
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem('authToken')
+            localStorage.removeItem('user')
+            navigate('/login')
+          }
+          return
         }
-      } catch (err) {}
+        setUser({
+          name: data.data.user.name || '',
+          location: data.data.user.location || 'Lagos, Nigeria',
+          avatarUrl: data.data.user.avatarUrl || PLACEHOLDER_IMAGE,
+        })
+        setNotificationCount(data.data.user.unreadNotifications || 0)
+      } catch (err) {
+        const savedUser = localStorage.getItem('user')
+        if (savedUser) {
+          const parsed = JSON.parse(savedUser)
+          setUser((prev) => ({ ...prev, name: parsed.name || '' }))
+        }
+      }
     }
     fetchUser()
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/properties/all')
-        if (!res.ok) throw new Error('HTTP error')
-        const data = await res.json()
-        if (data.properties && data.properties.length) {
-          setListings(data.properties)
+        const response = await fetch(`${BASE_URL}/properties/all`)
+        if (!response.ok) throw new Error('Server error')
+        const data = await response.json()
+
+        if (Array.isArray(data) && data.length > 0) {
+          const mappedListings = data.map((prop) => ({
+            id: prop.id,
+            title: prop.title,
+            location: prop.location || `${prop.city}, ${prop.state}`,
+            price: prop.price,
+            beds: prop.bedrooms,
+            baths: prop.bathrooms,
+            size: prop.squareFeet ? `${prop.squareFeet}m²` : null,
+            verified: prop.isVerified || true,
+            imageUrl:
+              prop.imageUrl ||
+              'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80',
+          }))
+          setListings(mappedListings)
+          setListingsError(false)
         } else {
           setListings(FALLBACK_LISTINGS)
+          setListingsError(false)
         }
-        setListingsError(false)
       } catch (err) {
-        console.warn('Using fallback listings because backend is unavailable')
+        console.warn('Backend unavailable, using fallback listings')
         setListings(FALLBACK_LISTINGS)
         setListingsError(true)
       }
@@ -282,7 +309,7 @@ export const HomePage = () => {
       <div className="max-w-2xl mx-auto px-4 pb-8">
         <div className="mt-5 mb-4">
           <h1 className="text-h2 text-text-primary font-bold">
-            Good morning, {user.name} 👋
+            Good morning{user.name ? `, ${user.name}` : ''} 👋
           </h1>
           <p className="text-small text-text-tertiary mt-0.5">
             Find and rent your next home with confidence
@@ -380,13 +407,11 @@ export const HomePage = () => {
               see all <FaArrowRight className="w-3 h-3" />
             </button>
           </div>
-
           {listingsError && (
             <div className="mb-3 text-xs text-warning bg-yellow-50 p-2 rounded">
               ⚠️ Live properties not available – showing sample data.
             </div>
           )}
-
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
             {listings.length > 0 ? (
               listings.slice(0, 5).map((listing) => (
@@ -397,7 +422,7 @@ export const HomePage = () => {
                 >
                   <div className="relative">
                     <img
-                      src={listing.imageUrl || FALLBACK_IMAGE}
+                      src={listing.imageUrl || PLACEHOLDER_IMAGE}
                       alt={listing.title}
                       className="w-full h-[120px] object-cover"
                     />
@@ -421,9 +446,9 @@ export const HomePage = () => {
                     </button>
                   </div>
                   <div className="p-3">
-                    <p className="text-small font-semibold text-text-primary truncate">
+                    <h3 className="text-small font-semibold text-text-primary truncate">
                       {listing.title}
-                    </p>
+                    </h3>
                     <p className="text-caption text-text-tertiary flex items-center gap-1 mt-0.5 mb-2">
                       <FaMapMarkerAlt className="w-3 h-3" /> {listing.location}
                     </p>
@@ -558,7 +583,7 @@ export const HomePage = () => {
                 className="bg-background-primary rounded-2xl px-5 py-4 flex items-center gap-4 shadow-lg border-2 border-secondary hover:shadow-xl transition-shadow"
               >
                 <img
-                  src={agent.avatarUrl || FALLBACK_IMAGE}
+                  src={agent.avatarUrl || PLACEHOLDER_IMAGE}
                   alt={agent.name}
                   className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-primary/20"
                 />
@@ -570,18 +595,13 @@ export const HomePage = () => {
                     <FaMapMarkerAlt className="w-3.5 h-3.5" /> {agent.location}
                   </p>
                   <p className="text-sm text-text-tertiary flex items-center gap-1 mt-1">
-                    <FaStar className="w-4 h-4 text-warning" />
+                    <FaStar className="w-4 h-4 text-warning" />{' '}
                     <span className="font-semibold">{agent.rating}</span> (
                     {agent.reviews} reviews)
                   </p>
                 </div>
                 <button
-                  type="button"
-                  onClick={() =>
-                    navigate(
-                      `/chat/${agent.name.toLowerCase().replace(/\s/g, '-')}`
-                    )
-                  }
+                  onClick={() => navigate('/messages')}
                   className="text-text-tertiary hover:text-primary transition-colors"
                 >
                   <FaComments className="w-10 h-10" />
@@ -592,7 +612,7 @@ export const HomePage = () => {
         </section>
 
         <section className="mb-6">
-          <h2 className="text-h2 text-black font-bold mb-4">How Its Works</h2>
+          <h2 className="text-h2 text-black font-bold mb-4">How It Works</h2>
           <div className="flex justify-between">
             {HOW_IT_WORKS.map((step) => (
               <div

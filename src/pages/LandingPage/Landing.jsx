@@ -487,10 +487,38 @@ export default function Landing() {
             </a>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
+            <PropertyCard
+              image="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265756/b5e42d52e44a53c418f5ba77ca2b51d5_vdb7kz.jpg"
+              title="2 Bedroom Apartment"
+              price="₦2,500,000 / year"
+              location="Lekki Phase 1, Lagos"
+              rating="4.5"
+              isVerified={true}
+            />
+            <PropertyCard
+              image="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265806/8d61cdace22ac4c3a60ad39d236877f2_t4ggsl.jpg"
+              title="3 Bedroom Duplex"
+              price="₦4,200,000 / year"
+              location="Ikeja, Lagos"
+              rating="4.8"
+              isVerified={true}
+            />
+            <PropertyCard
+              image="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265922/4f6ef08e4507b34517630488a6b59430_vpwj6u.jpg"
+              title="Mini Flat"
+              price="₦1,000,000 / year"
+              location="Surulere, Lagos"
+              rating="4.2"
+              isVerified={true}
+            />
+            <PropertyCard
+              image="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781265699/33a6d9ded05e80a9178d6b9fc787f880_syqijz.jpg"
+              title="Studio Apartment"
+              price="₦850,000 / year"
+              location="Victoria Island, Lagos"
+              rating="4.0"
+              isVerified={true}
+            />
           </div>
           <div className="flex justify-center mt-8">
             <button className="bg-primary text-white px-6 py-3 rounded-lg text-small font-semibold hover:bg-primary-dark transition-colors flex items-center gap-2">
