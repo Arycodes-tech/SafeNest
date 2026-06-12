@@ -8,6 +8,8 @@ import {
   FaImage,
 } from 'react-icons/fa'
 
+const BASE_URL = 'http://localhost:5000/api/v1'
+
 export const VerifyPropertyOwnership = () => {
   const navigate = useNavigate()
 
@@ -66,49 +68,48 @@ export const VerifyPropertyOwnership = () => {
     setError('')
     setIsSubmitting(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const token = localStorage.getItem('authToken')
+    if (!token) {
+      setError('You are not logged in. Please log in and try again.')
+      setIsSubmitting(false)
+      navigate('/login')
+      return
+    }
 
-    console.log({
-      propertyAddress,
-      propertyType,
-      ownershipDoc: ownershipDoc?.name,
-      supportingDoc: supportingDoc?.name,
-      photos: photos.map((p) => p.name),
-    })
-
-    alert('Property ownership verification submitted! (demo)')
-    navigate('/dashboard')
-    setIsSubmitting(false)
-
-    // BACKEND CODE
-    /*
     try {
       const formData = new FormData()
+
       formData.append('address', propertyAddress)
       formData.append('type', propertyType)
-      formData.append('ownershipDocument', ownershipDoc)
-      if (supportingDoc) formData.append('supportingDocument', supportingDoc)
-      photos.forEach(photo => formData.append('photos', photo))
 
-      const response = await fetch('http://localhost:5001/api/landlord/verify-property', {
+      formData.append('ownershipDocument', ownershipDoc)
+
+      if (supportingDoc) {
+        formData.append('supportingDocument', supportingDoc)
+      }
+      photos.forEach((photo) => {
+        formData.append('photos', photo)
+      })
+
+      const response = await fetch(`${BASE_URL}/properties/create`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: formData, 
+        body: formData,
       })
+
       const data = await response.json()
-      if (response.ok) {
-        navigate('/verification-submitted')
-      } else {
-        setError(data.message || 'Verification failed')
+      if (!response.ok) {
+        setError(data.message || 'Submission failed. Please try again.')
+        return
       }
+      navigate('/dashboard')
     } catch (err) {
-      setError('Network error. Please try again.')
+      setError('Cannot connect to server. Make sure the backend is running.')
     } finally {
       setIsSubmitting(false)
     }
-    */
   }
 
   const getFileIcon = (file) => {

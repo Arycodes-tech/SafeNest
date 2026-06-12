@@ -25,7 +25,7 @@ import { HomePage } from './pages/HomePage/Home'
 import VerifiedListings from './pages/VerifiedListingsPage/VerifiedListings'
 import SavedListings from './pages/SavedListingsPage/SavedListings'
 import { FilterPanel } from './pages/FilterPanelPage/FilterPanel'
-import ResetPassword from './pages/Reset'
+import ResetPasswordPage from './pages/ResetPassword/reset'
 import { BrowsePropertiesPage } from './pages/BrowsePropertiespage/BrowseProperties'
 import { PropertyDetailsPage } from './pages/BrowsePropertiespage/PropertyDetails'
 import { RequestToRentPage } from './pages/BrowsePropertiespage/RequestToRent'
@@ -38,6 +38,8 @@ import { ChatConversation } from './pages/ChatConversation'
 import { ProfilePage } from './pages/ProfilePage/LandordProfile'
 import RenterProfilePage from './pages/ProfilePage/ProfilePage'
 import ReviewAndSubmitPage from './pages/BrowsePropertiespage/RequestToRentReview'
+import { CreateNewPassword } from './pages/ResetPassword/CreateNewPassword'
+import { VerifyResetCodePage } from './pages/ResetPassword/VerifyResetCode'
 
 function App() {
   return (
@@ -54,7 +56,6 @@ function App() {
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/request-to-rent/review" element={<ReviewAndSubmitPage />} />
-
       <Route
         path="/verification/complete-profile"
         element={<CompleteProfile />}
@@ -84,7 +85,7 @@ function App() {
       <Route path="/homepage" element={<HomePage />} />
       <Route path="/filter" element={<FilterPanel />} />
       <Route path="/forgot/password" element={<ForgotPassword />} />
-      <Route path="/reset/password" element={<ResetPassword />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />.
       <Route path="/browse/properties" element={<BrowsePropertiesPage />} />
       <Route path="/listing/:id" element={<PropertyDetailsPage />} />
       <Route path="/request-to-rent/:id" element={<RequestToRentPage />} />
@@ -99,6 +100,8 @@ function App() {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/renter/profile" element={<RenterProfilePage />} />
       <Route path="/review/submit" element={<ReviewAndSubmitPage />} />
+      <Route path="/create-new-password" element={<CreateNewPassword />} />
+      <Route path="/verify-reset-code" element={<VerifyResetCodePage />} />
     </Routes>
   )
 }
