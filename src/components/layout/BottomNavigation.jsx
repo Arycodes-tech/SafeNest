@@ -1,13 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { FaHome, FaBookmark, FaEnvelope, FaUser } from 'react-icons/fa'
 
 export const BottomNavigation = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [userRole, setUserRole] = useState(null)
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    setUserRole(user.role)
+  }, [])
+
+  const getHomePath = () => {
+    if (userRole === 'renter') return '/homepage'
+    return '/dashboard'
+  }
 
   const tabs = [
-    { name: 'Home', icon: <FaHome className="text-xl" />, path: '/home' },
+    {
+      name: 'Home',
+      icon: <FaHome className="text-xl" />,
+      path: getHomePath(),
+    },
     { name: 'Saved', icon: <FaBookmark className="text-xl" />, path: '/saved' },
     {
       name: 'Messages',
@@ -16,8 +31,14 @@ export const BottomNavigation = () => {
     },
     { name: 'Profile', icon: <FaUser className="text-xl" />, path: '/profile' },
   ]
+
   const isActive = (path) => {
-    if (path === '/') return location.pathname === '/'
+    if (path === '/homepage' || path === '/dashboard/landlord') {
+      return (
+        location.pathname === '/homepage' ||
+        location.pathname === '/dashboard/landlord'
+      )
+    }
     return location.pathname.startsWith(path)
   }
 
@@ -37,15 +58,12 @@ export const BottomNavigation = () => {
               {tab.icon}
             </span>
             <span
-              className={`text-body md:text-h2 ${active ? 'font-bold text-primary' : 'text-text-tertiary'}`}
+              className={`text-xs md:text-sm ${active ? 'font-bold text-primary' : 'text-text-tertiary'}`}
             >
               {tab.name}
             </span>
-
             <span
-              className={`h-1.5 w-1.5 rounded-full bg-primary transition-all duration-200 md:h-3.5 w-3.5 ${
-                active ? 'opacity-500' : 'opacity-0'
-              }`}
+              className={`h-1.5 w-1.5 rounded-full bg-primary transition-all duration-200 ${active ? 'opacity-100' : 'opacity-0'}`}
             />
           </button>
         )

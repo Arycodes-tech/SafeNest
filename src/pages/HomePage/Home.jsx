@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   FaMapMarkerAlt,
@@ -19,11 +19,10 @@ import {
   FaEnvelope,
   FaUser,
 } from 'react-icons/fa'
-import { GiPositionMarker } from 'react-icons/gi'
 import { BottomNavigation } from '../../components/layout/BottomNavigation'
 
-const cloudinaryPlaceholder = (publicId = 'sample') =>
-  `https://res.cloudinary.com/demo/image/upload/v1312461206/${publicId}.jpg`
+const FALLBACK_IMAGE =
+  'https://res.cloudinary.com/demo/image/upload/v1312461206/placeholder.jpg'
 
 const QUICK_LINKS = [
   {
@@ -60,42 +59,6 @@ const QUICK_LINKS = [
     path: '/agents',
     bgColor: 'bg-[#FCEACB]',
     iconColor: 'text-[#E49307]',
-  },
-]
-
-const LISTINGS = [
-  {
-    id: 1,
-    title: '2 Bedroom Apartment',
-    location: 'Lekki Phase 1, Lagos',
-    price: '₦2,500,000',
-    beds: 2,
-    baths: 2,
-    size: '120m²',
-    verified: true,
-    imageCloudId: 'apartment1',
-  },
-  {
-    id: 2,
-    title: '3 Bedroom Duplex',
-    location: 'Ikeja, Lagos',
-    price: '₦4,200,000',
-    beds: 3,
-    baths: 3,
-    size: '120m²',
-    verified: true,
-    imageCloudId: 'apartment2',
-  },
-  {
-    id: 3,
-    title: 'Mini Flat',
-    location: 'Surulere, Lagos',
-    price: '₦1,000,000',
-    beds: 1,
-    baths: 1,
-    size: null,
-    verified: true,
-    imageCloudId: 'apartment3',
   },
 ]
 
@@ -139,21 +102,24 @@ const TOP_AGENTS = [
     location: 'Lekki Phase 1, Lagos',
     rating: '4.9',
     reviews: 120,
-    avatarCloudId: 'avatar1',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar1.jpg',
   },
   {
     name: 'John Akinwale',
     location: 'Victoria Island, Lagos',
     rating: '4.7',
     reviews: 96,
-    avatarCloudId: 'avatar2',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar2.jpg',
   },
   {
     name: 'Dariel Ibrahim',
     location: 'Ikeja, Lagos',
     rating: '4.6',
     reviews: 76,
-    avatarCloudId: 'avatar3',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/avatar3.jpg',
   },
 ]
 
@@ -161,12 +127,12 @@ const HOW_IT_WORKS = [
   {
     step: '1. Search',
     desc: 'Find properties that fit your needs',
-    icon: <FaSearch className="text-xl " />,
+    icon: <FaSearch className="text-xl" />,
   },
   {
     step: '2. Connect',
     desc: 'Chat with agents or landlords',
-    icon: <FaComments className="text-xl " />,
+    icon: <FaComments className="text-xl" />,
   },
   {
     step: '3. Secure & Rent',
@@ -175,21 +141,60 @@ const HOW_IT_WORKS = [
   },
 ]
 
+const FALLBACK_LISTINGS = [
+  {
+    id: 1,
+    title: '2 Bedroom Apartment',
+    location: 'Lekki Phase 1, Lagos',
+    price: '2,500,000',
+    beds: 2,
+    baths: 2,
+    size: '120m²',
+    verified: true,
+    imageUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/apartment1.jpg',
+  },
+  {
+    id: 2,
+    title: '3 Bedroom Duplex',
+    location: 'Ikeja, Lagos',
+    price: '4,200,000',
+    beds: 3,
+    baths: 3,
+    size: '120m²',
+    verified: true,
+    imageUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/house1.jpg',
+  },
+  {
+    id: 3,
+    title: 'Mini Flat',
+    location: 'Surulere, Lagos',
+    price: '1,000,000',
+    beds: 1,
+    baths: 1,
+    size: null,
+    verified: true,
+    imageUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/apartment2.jpg',
+  },
+]
+
 export const HomePage = () => {
   const navigate = useNavigate()
 
-  const user = {
+  const [user, setUser] = useState({
     name: 'Bayo',
-    avatarCloudId: 'user-avatar',
-    notificationCount: 0,
     location: 'Lagos, Nigeria',
-  }
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1312461206/user-avatar.jpg',
+  })
+  const [notificationCount, setNotificationCount] = useState(0)
+
+  const [listings, setListings] = useState([])
+  const [listingsError, setListingsError] = useState(false)
 
   const [savedListings, setSavedListings] = useState([])
-
-  const [notificationCount, setNotificationCount] = useState(
-    user.notificationCount
-  )
 
   const toggleSave = (id) => {
     setSavedListings((prev) =>
@@ -197,34 +202,75 @@ export const HomePage = () => {
     )
   }
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('authToken')
+      if (!token) return
+      try {
+        const res = await fetch('http://localhost:5001/api/v1/users/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (res.ok) {
+          const data = await res.json()
+          setUser({
+            name: data.user.name || 'Bayo',
+            location: data.user.location || 'Lagos, Nigeria',
+            avatarUrl:
+              data.user.avatarUrl ||
+              'https://res.cloudinary.com/demo/image/upload/v1312461206/user-avatar.jpg',
+          })
+          setNotificationCount(data.user.unreadNotifications || 0)
+        }
+      } catch (err) {}
+    }
+    fetchUser()
+  }, [])
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/properties/all')
+        if (!res.ok) throw new Error('HTTP error')
+        const data = await res.json()
+        if (data.properties && data.properties.length) {
+          setListings(data.properties)
+        } else {
+          setListings(FALLBACK_LISTINGS)
+        }
+        setListingsError(false)
+      } catch (err) {
+        console.warn('Using fallback listings because backend is unavailable')
+        setListings(FALLBACK_LISTINGS)
+        setListingsError(true)
+      }
+    }
+    fetchListings()
+  }, [])
+
   return (
     <div className="min-h-screen bg-background-secondary font-sans pb-16">
       <div className="sticky top-0 z-10 bg-background-primary px-4 pt-4 pb-3 shadow-floating">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <button className="flex items-center gap-2 bg-background-hover rounded-full px-4 py-2 text-text-secondary text-small font-medium">
-            <FaMapMarkerAlt
-              className="w-5 h-5 bg-[#DDECFD] rounded-lg  "
-              color="blue"
-            />
+          <button className="flex items-center gap-2 bg-background-hover rounded-full px-4 py-2">
+            <FaMapMarkerAlt className="w-5 h-5" />
             <span>{user.location}</span>
             <FaChevronDown className="w-5 h-5" />
           </button>
-
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/notifications')}
-              className="relative bg-background-hover rounded-full p-2 text-text-secondary"
+              className="relative bg-background-hover rounded-full p-2"
             >
-              <FaBell className="w-5 h-5 bg-[#DDECFD]" />
+              <FaBell className="w-5 h-5" />
               {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-2 bg-error text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-error text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {notificationCount}
                 </span>
               )}
             </button>
             <button onClick={() => navigate('/profile')}>
               <img
-                src={cloudinaryPlaceholder(user.avatarCloudId)}
+                src={user.avatarUrl}
                 alt="Profile"
                 className="w-9 h-9 rounded-full border-2 border-primary object-cover"
               />
@@ -261,7 +307,7 @@ export const HomePage = () => {
         </div>
 
         <div className="relative bg-[#ACC5FD] rounded-2xl overflow-hidden mb-5 min-h-[180px] flex items-center">
-          <div className="flex-1 p-5 ">
+          <div className="flex-1 p-5">
             <h2 className="text-black font-bold text-xl leading-tight mb-3 md:text-h2">
               Rent safely.
               <br />
@@ -290,11 +336,10 @@ export const HomePage = () => {
           <div className="w-[140px] h-[180px] flex-shrink-0">
             <img
               src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781095664/3d-rendering-house-model-removebg-preview_1_f5qisp.jpg"
-              alt="Hero img"
+              alt="Hero property"
               className="w-full h-full object-cover"
             />
           </div>
-
           <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
             <span className="w-3 h-3 rounded-full bg-[#1E3ABA]" />
             <span className="w-3 h-3 rounded-full bg-white/40" />
@@ -336,65 +381,76 @@ export const HomePage = () => {
             </button>
           </div>
 
+          {listingsError && (
+            <div className="mb-3 text-xs text-warning bg-yellow-50 p-2 rounded">
+              ⚠️ Live properties not available – showing sample data.
+            </div>
+          )}
+
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide">
-            {LISTINGS.map((listing) => (
-              <div
-                key={listing.id}
-                onClick={() => navigate(`/listing/${listing.id}`)}
-                className="flex-shrink-0 w-[200px] snap-start bg-background-primary rounded-2xl overflow-hidden shadow-card cursor-pointer"
-              >
-                <div className="relative">
-                  <img
-                    src={cloudinaryPlaceholder(listing.imageCloudId)}
-                    alt={listing.title}
-                    className="w-full h-[120px] object-cover"
-                  />
-                  {listing.verified && (
-                    <span className="absolute bottom-2 left-2 bg-success text-white text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <FaShieldAlt className="w-2 h-2" /> Verified
-                    </span>
-                  )}
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleSave(listing.id)
-                    }}
-                  >
-                    {savedListings.includes(listing.id) ? (
-                      <FaHeart className="w-4 h-4 text-error" />
-                    ) : (
-                      <FaRegHeart className="w-4 h-4 text-text-tertiary" />
-                    )}
-                  </button>
-                </div>
-                <div className="p-3">
-                  <p className="text-small font-semibold text-text-primary truncate">
-                    {listing.title}
-                  </p>
-                  <p className="text-caption text-text-tertiary flex items-center gap-1 mt-0.5 mb-2">
-                    <FaMapMarkerAlt className="w-3 h-3" /> {listing.location}
-                  </p>
-                  <p className="text-primary font-bold text-small mb-2">
-                    {listing.price}/year
-                  </p>
-                  <div className="flex items-center gap-3 text-caption text-text-tertiary">
-                    <span className="flex items-center gap-1">
-                      <FaBed className="w-3 h-3" /> {listing.beds}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <FaBath className="w-3 h-3" /> {listing.baths}
-                    </span>
-                    {listing.size && (
-                      <span className="flex items-center gap-1">
-                        <FaRulerCombined className="w-3 h-3" /> {listing.size}
+            {listings.length > 0 ? (
+              listings.slice(0, 5).map((listing) => (
+                <div
+                  key={listing.id}
+                  onClick={() => navigate(`/listing/${listing.id}`)}
+                  className="flex-shrink-0 w-[200px] snap-start bg-background-primary rounded-2xl overflow-hidden shadow-card cursor-pointer"
+                >
+                  <div className="relative">
+                    <img
+                      src={listing.imageUrl || FALLBACK_IMAGE}
+                      alt={listing.title}
+                      className="w-full h-[120px] object-cover"
+                    />
+                    {listing.verified && (
+                      <span className="absolute bottom-2 left-2 bg-success text-white text-[9px] px-2 py-0.5 rounded-full">
+                        ✓ Verified
                       </span>
                     )}
+                    <button
+                      className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleSave(listing.id)
+                      }}
+                    >
+                      {savedListings.includes(listing.id) ? (
+                        <FaHeart className="w-4 h-4 text-error" />
+                      ) : (
+                        <FaRegHeart className="w-4 h-4 text-text-tertiary" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="p-3">
+                    <p className="text-small font-semibold text-text-primary truncate">
+                      {listing.title}
+                    </p>
+                    <p className="text-caption text-text-tertiary flex items-center gap-1 mt-0.5 mb-2">
+                      <FaMapMarkerAlt className="w-3 h-3" /> {listing.location}
+                    </p>
+                    <p className="text-primary font-bold text-small mb-2">
+                      ₦{listing.price}/year
+                    </p>
+                    <div className="flex items-center gap-3 text-caption text-text-tertiary">
+                      <span className="flex items-center gap-1">
+                        <FaBed className="w-3 h-3" /> {listing.beds}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <FaBath className="w-3 h-3" /> {listing.baths}
+                      </span>
+                      {listing.size && (
+                        <span className="flex items-center gap-1">
+                          <FaRulerCombined className="w-3 h-3" /> {listing.size}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="w-full text-center py-10 text-text-tertiary">
+                No properties available at the moment.
               </div>
-            ))}
+            )}
           </div>
         </section>
 
@@ -404,19 +460,19 @@ export const HomePage = () => {
             <p className="text-body font-bold text-black md:text-h3">
               Your safety is our priority
             </p>
-            <p className="text-caption  text-black mt-0.5 md:text-body">
+            <p className="text-caption text-black mt-0.5 md:text-body">
               All payments are secured with escrow until you confirm
             </p>
           </div>
           <button
             onClick={() => navigate('/safety')}
-            className="text-small text-black bg-white p-3.5 border-border rounded-xl  font-bold whitespace-nowrap flex items-center gap-0.5"
+            className="text-small text-black bg-white p-3.5 border-border rounded-xl font-bold whitespace-nowrap flex items-center gap-0.5"
           >
             Learn more <FaArrowRight className="w-3 h-3" />
           </button>
         </div>
 
-        <section className="mb-6 ">
+        <section className="mb-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-h2 text-text-primary font-bold">
               Continue Your Search
@@ -439,7 +495,7 @@ export const HomePage = () => {
                   {s.label}
                 </p>
                 <p className="text-caption text-black mt-2">{s.price}</p>
-                <span className="mt-5 inline-block text-[15px] border border-primary text-primary bg-[#C7D8FE] font-bold text- rounded-xl px-2 py-0.5">
+                <span className="mt-5 inline-block text-[15px] border border-primary text-primary bg-[#C7D8FE] font-bold rounded-xl px-2 py-0.5">
                   Saved
                 </span>
               </button>
@@ -459,7 +515,6 @@ export const HomePage = () => {
               View map <FaMapMarkerAlt className="w-4 h-4" />
             </button>
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {POPULAR_LOCATIONS.map((loc) => (
               <button
@@ -472,14 +527,12 @@ export const HomePage = () => {
                   alt={loc.name}
                   className="w-full h-full object-cover"
                 />
-
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                <div className="absolute px-2 top-1  ">
-                  <p className="text-white text-small text-semibold font-bold leading-tight">
+                <div className="absolute px-2 top-1">
+                  <p className="text-white text-small font-bold leading-tight">
                     {loc.name}
                   </p>
-                  <p className="text-white/80 text-xs ">
+                  <p className="text-white/80 text-xs">
                     {loc.count} properties
                   </p>
                 </div>
@@ -502,13 +555,10 @@ export const HomePage = () => {
             {TOP_AGENTS.map((agent) => (
               <div
                 key={agent.name}
-                className="bg-background-primary rounded-2xl  px-5 py-4 flex items-center gap-4 shadow-lg border-2 border-secondary hover:shadow-xl transition-shadow"
+                className="bg-background-primary rounded-2xl px-5 py-4 flex items-center gap-4 shadow-lg border-2 border-secondary hover:shadow-xl transition-shadow"
               >
                 <img
-                  src={
-                    agent.avatarUrl ||
-                    cloudinaryPlaceholder(agent.avatarCloudId)
-                  }
+                  src={agent.avatarUrl || FALLBACK_IMAGE}
                   alt={agent.name}
                   className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-primary/20"
                 />

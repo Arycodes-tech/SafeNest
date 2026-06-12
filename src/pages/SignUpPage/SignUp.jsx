@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
+import { HiShieldCheck } from 'react-icons/hi'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
+
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -12,14 +13,20 @@ export const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agencyName, setAgencyName] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
+
   const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [apiError, setApiError] = useState('')
 
   const role = localStorage.getItem('signupRole')
 
-  if (!role) {
-    navigate('/role')
-    return null
-  }
+  useEffect(() => {
+    if (!role) {
+      navigate('/role')
+    }
+  }, [role, navigate])
+
+  if (!role) return null
 
   const handlePhoneChange = (e) => {
     const digitsOnly = e.target.value.replace(/\D/g, '')
@@ -36,165 +43,239 @@ export const SignUpPage = () => {
     if (!/[A-Z]/.test(value)) return false
     if (!/[a-z]/.test(value)) return false
     if (!/[0-9]/.test(value)) return false
+    if (!/[^A-Za-z0-9]/.test(value)) return false
     return true
   }
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const newErrors = {}
 
-    if (!fullName.trim()) {
-      newErrors.fullName = 'Full name is required'
-    }
-
+    // --- validation (same as before) ---
+    if (!fullName.trim()) newErrors.fullName = 'Full name is required'
     if (!email.trim()) {
       newErrors.email = 'Email is required'
     } else if (!isValidEmail(email)) {
       newErrors.email = 'Enter a valid email address (e.g. user@email.com)'
     }
-
     if (!phone.trim()) {
       newErrors.phone = 'Phone number is required'
     } else if (phone.length < 10) {
       newErrors.phone = 'Enter a valid phone number (at least 10 digits)'
     }
-
     if (!password) {
       newErrors.password = 'Password is required'
     } else if (!isStrongPassword(password)) {
       newErrors.password =
         'Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character'
     }
-
     if (!confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password'
     } else if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
     }
-
     if (role === 'agent' && !agencyName.trim()) {
       newErrors.agencyName = 'Agency name is required'
     }
-
-    if (!agreeTerms) {
-      newErrors.agreeTerms = 'You must agree to the terms'
-    }
+    if (!agreeTerms) newErrors.agreeTerms = 'You must agree to the terms'
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       return
     }
 
-    navigate('/verify-otp', { state: { phone: phone, email: email } })
+    setIsLoading(true)
+    setApiError('')
 
-    console.log('Signup data:', {
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    const mockUser = {
       fullName,
       email,
       phone,
-      password,
-      agencyName,
-      agreeTerms,
       role,
-    })
+      agencyName: role === 'agent' ? agencyName : undefined,
+      agreeTerms,
+    }
+    localStorage.setItem('user', JSON.stringify(mockUser))
+    localStorage.setItem('authToken', 'demo-token-456')
+
+    navigate('/verify-otp', { state: { phone, email } })
+    setIsLoading(false)
+    return
+
+    // BACKEND CODE
+    /*
+    try {
+      const response = await fetch('http://localhost:5001/api/v1/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: fullName,
+          email: email,
+          password: password,
+          passwordConfirm: confirmPassword,
+        }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        setApiError(data.message || 'Something went wrong. Please try again.')
+        return
+      }
+
+      if (data.token) {
+        localStorage.setItem('authToken', data.token)
+      }
+
+      navigate('/verify-otp', { state: { phone, email } })
+    } catch (error) {
+      setApiError('Network error. Check your connection and try again.')
+    } finally {
+      setIsLoading(false)
+    }
+    */
   }
 
   return (
-    <div className="min-h-screen bg-background-primary flex items-center justify-center px-4 py-8">
-      <div className="max-w-md w-full">
-        <h1 className="text-h2 text-text-primary text-center mb-2">
-          Create Your Account
-        </h1>
-        <p className="text-body text-text-secondary text-center mb-8">
-          Let's set up your SafeNest account!
-        </p>
-
-        <div className="flex flex-col gap-5">
-          <Input
-            label="Full Name"
-            placeholder="Enter your full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            error={errors.fullName}
+    <div className="min-h-screen bg-white grid grid-cols-1 md:grid-cols-2">
+      {/* Left column – illustration (desktop only) */}
+      <div className="hidden md:flex flex-col justify-between p-8 bg-background-secondary min-h-screen">
+        <div className="flex items-center gap-2">
+          <img
+            src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1781215326/LOGO_fsgsib.svg"
+            className="text-primary w-9 h-9"
+            alt="SafeNest logo"
           />
-          <Input
-            label="Email Address"
-            type="email"
-            placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errors.email}
-          />
-          <Input
-            label="Phone Number"
-            type="tel"
-            inputMode="numeric"
-            placeholder="Enter your phone number"
-            value={phone}
-            onChange={handlePhoneChange}
-            error={errors.phone}
-          />
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors.password}
-          />
-          <Input
-            label="Confirm Password"
-            type="password"
-            placeholder="Confirm your password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            error={errors.confirmPassword}
-          />
+          <span className="text-text-primary text-xl font-bold">
+            Safe<span className="text-primary">Nest</span>
+          </span>
+        </div>
 
-          {role === 'agent' && (
-            <Input
-              label="Agency Name"
-              placeholder="Enter your agency name"
-              value={agencyName}
-              onChange={(e) => setAgencyName(e.target.value)}
-              error={errors.agencyName}
-            />
-          )}
+        <div className="flex-1 flex items-center justify-center py-8">
+          <img
+            src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1780844868/view-3d-house-model_1_pb87ww.jpg"
+            alt="3D House"
+            className="w-full max-w-sm object-contain"
+          />
+        </div>
 
-          <label className="flex items-start gap-2 text-sm text-text-secondary">
-            <input
-              type="checkbox"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-0.5"
-            />
-            <span>
-              I agree to the{' '}
-              <button type="button" className="text-primary underline">
-                Terms & Conditions
-              </button>{' '}
-              and{' '}
-              <button type="button" className="text-primary underline">
-                Privacy Policy
-              </button>{' '}
-              of SafeNest
-            </span>
-          </label>
-          {errors.agreeTerms && (
-            <p className="text-xs text-error">{errors.agreeTerms}</p>
-          )}
+        <div className="h-9" />
+      </div>
 
-          <Button variant="primary" fullWidth onClick={handleSignUp}>
-            Continue
-          </Button>
-
-          <p className="text-center text-sm text-text-tertiary">
-            Already have an account?{' '}
-            <button
-              onClick={() => navigate('/login')}
-              className="text-primary underline"
-            >
-              Sign in
-            </button>
+      {/* Right column – form */}
+      <div className="flex items-center justify-center px-6 py-12">
+        <div className="max-w-md w-full">
+          <h1 className="text-3xl font-bold text-text-primary mb-1">
+            Create Your Account
+          </h1>
+          <p className="text-sm text-text-secondary mb-8">
+            Let's set up your SafeNest account!
           </p>
+
+          <div className="flex flex-col gap-5">
+            <Input
+              label="Full Name"
+              placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              error={errors.fullName}
+            />
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={errors.email}
+            />
+            <Input
+              label="Phone Number"
+              type="tel"
+              inputMode="numeric"
+              placeholder="Enter your phone number"
+              value={phone}
+              onChange={handlePhoneChange}
+              error={errors.phone}
+            />
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+            />
+            <Input
+              label="Confirm Password"
+              type="password"
+              placeholder="Enter your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              error={errors.confirmPassword}
+            />
+
+            {role === 'agent' && (
+              <Input
+                label="Agency Name"
+                placeholder="Enter your agency name"
+                value={agencyName}
+                onChange={(e) => setAgencyName(e.target.value)}
+                error={errors.agencyName}
+              />
+            )}
+
+            <div className="flex flex-col gap-1">
+              <label className="flex items-start gap-2 text-sm text-text-secondary cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  className="mt-0.5 accent-primary"
+                />
+                <span>
+                  I agree to the{' '}
+                  <button type="button" className="text-primary underline">
+                    Terms & Conditions
+                  </button>{' '}
+                  and{' '}
+                  <button type="button" className="text-primary underline">
+                    Privacy Policy
+                  </button>
+                </span>
+              </label>
+              {errors.agreeTerms && (
+                <p className="text-xs text-error ml-5">{errors.agreeTerms}</p>
+              )}
+            </div>
+
+            {apiError && (
+              <p className="text-sm text-error text-center">{apiError}</p>
+            )}
+
+            <button
+              onClick={handleSignUp}
+              disabled={isLoading}
+              className={`
+                w-full py-3 rounded-xl text-base font-semibold transition-all duration-150
+                ${
+                  isLoading || !agreeTerms
+                    ? 'bg-border text-text-tertiary cursor-not-allowed'
+                    : 'bg-primary text-white hover:opacity-90'
+                }
+              `}
+            >
+              {isLoading ? 'Creating account...' : 'Continue'}
+            </button>
+
+            <p className="text-center text-sm text-text-secondary">
+              Already have an account?{' '}
+              <button
+                onClick={() => navigate('/login')}
+                className="text-primary font-medium hover:underline"
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>

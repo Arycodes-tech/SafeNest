@@ -28,13 +28,18 @@ import WelcomeLandlord from './pages/VerificationFlow/WelcomeLandlord'
 import { HomePage } from './pages/HomePage/Home'
 import VerifiedListings from './pages/VerifiedListingsPage/VerifiedListings'
 import SavedListings from './pages/SavedListingsPage/SavedListings'
-
 import { FilterPanel } from './pages/FilterPanelPage/FilterPanel'
 import ResetPassword from './pages/Reset'
 import { BrowsePropertiesPage } from './pages/BrowsePropertiespage/BrowseProperties'
 import { PropertyDetailsPage } from './pages/BrowsePropertiespage/PropertyDetails'
 import { RequestToRentPage } from './pages/BrowsePropertiespage/RequestToRent'
 import { ReportScamPage } from './pages/ReportScamPage/ReportScam'
+import { NotificationPage } from './pages/HomePage/NotificationPage'
+import { Dashboard } from './pages/landlorddashboard'
+import { VerifyPropertyOwnership } from './pages/VerifyPropertiesListing'
+import { MessagesList } from './pages/chatscreen'
+import { ChatConversation } from './pages/ChatConversation'
+import { ProfilePage } from './pages/ProfilePage/LandordProfile'
 
 function App() {
   return (
@@ -79,9 +84,23 @@ function App() {
       <Route path="/verification/rejected" element={<VerificationRejected />} />
       <Route path="/verification/pending" element={<VerificationPending />} />
       <Route path="/verification/welcome" element={<WelcomeLandlord />} />
-      <Route path="/HomePage" element={<HomePage />} />
+      <Route path="/homepage" element={<HomePage />} />
+      <Route path="/filter" element={<FilterPanel />} />
+      <Route path="/forgot/password" element={<ForgotPassword />} />
+      <Route path="/reset/password" element={<ResetPassword />} />
+      <Route path="/browse/properties" element={<BrowsePropertiesPage />} />
+      <Route path="/listing/:id" element={<PropertyDetailsPage />} />
+      <Route path="/request-to-rent/:id" element={<RequestToRentPage />} />
+      <Route path="/report-scam" element={<ReportScamPage />} />
+      <Route path="/verified-listings" element={<VerifiedListings />} />
+      <Route path="/saved" element={<SavedListings />} />
+      <Route path="/notifications" element={<NotificationPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/verify-property" element={<VerifyPropertyOwnership />} />
+      <Route path="/messages" element={<MessagesList />} />
+      <Route path="/messages/:id" element={<ChatConversation />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   )
 }
-
 export default App

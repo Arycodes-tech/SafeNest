@@ -66,7 +66,7 @@ export const VerifyOtpPage = () => {
 
   return (
     <div className="min-h-screen bg-background-secondary flex items-center justify-center px-4 py-8">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-md p-6 md:p-8 text-center">
+      <div className="bg-white w-full max-w-md  rounded-2xl shadow-xl p-6 md:p-8 text-center">
         <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
           Verify Your Phone Number
         </h1>
@@ -86,7 +86,7 @@ export const VerifyOtpPage = () => {
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
-              className="w-12 h-12 text-center text-xl font-bold border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-12 h-12 text-center text-xl font-bold bg-grey border-2 border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-success/20 focus:border-success"
             />
           ))}
         </div>
