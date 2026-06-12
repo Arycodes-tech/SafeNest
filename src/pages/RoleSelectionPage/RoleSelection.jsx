@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
-import { FaCheckCircle } from 'react-icons/fa'
-import { FaUser, FaHandshake, FaBuilding } from 'react-icons/fa'
 
 export const RoleSelectionPage = () => {
   const navigate = useNavigate()
@@ -13,19 +10,22 @@ export const RoleSelectionPage = () => {
       id: 'renter',
       title: 'Renter',
       description: 'I want to find a place to rent',
-      icon: <FaUser className="w-12 h-12 text-primary" />,
+      image:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781216320/Rectangle_690_t2jany.jpg',
     },
     {
       id: 'agent',
       title: 'Agent',
       description: 'I help people find rental properties',
-      icon: <FaHandshake className="w-12 h-12 text-primary" />,
+      image:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781216320/Rectangle_691_nkkczd.jpg',
     },
     {
       id: 'landlord',
       title: 'Landlord',
       description: 'I want to list and manage my properties',
-      icon: <FaBuilding className="w-12 h-12 text-primary" />,
+      image:
+        'https://res.cloudinary.com/dty5t7pq7/image/upload/v1781216320/Rectangle_692_pbygnu.jpg',
     },
   ]
 
@@ -37,28 +37,46 @@ export const RoleSelectionPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background-primary grid grid-cols-1 md:grid-cols-2">
-      <div className="hidden md:block px-10 relative bg-primary/5">
-        <img
-          src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1780844868/view-3d-house-model_1_pb87ww.jpg"
-          alt="image"
-          className="w-3/4 h-auto object-contain rounded-2xl"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+    <div className="min-h-screen bg-white grid grid-cols-1 md:grid-cols-2">
+      <div className="hidden md:flex flex-col justify-between p-8 bg-background-secondary min-h-screen">
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+            <img
+              src=" https://res.cloudinary.com/dty5t7pq7/image/upload/v1781215326/LOGO_fsgsib.svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            ></img>
+          </div>
+          <span className="text-text-primary text-xl font-bold">
+            Safe<span className="text-primary">Nest</span>
+          </span>
+        </div>
+
+        <div className="flex-1 flex items-center justify-center py-8">
+          <img
+            src="https://res.cloudinary.com/dty5t7pq7/image/upload/v1780844868/view-3d-house-model_1_pb87ww.jpg"
+            alt="3D House"
+            className="w-full max-w-sm object-contain"
+          />
+        </div>
+
+        <div className="h-9" />
       </div>
 
       <div className="flex items-center justify-center px-6 py-12">
         <div className="max-w-lg w-full">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-2">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-text-primary mb-1">
               Register As
             </h1>
-            <p className="text-base text-text-secondary">
+            <p className="text-sm text-text-secondary">
               Choose how you want to use SafeNest
             </p>
           </div>
 
-          <div className="space-y-4 mb-10">
+          <div className="flex flex-col gap-4 mb-8">
             {roles.map((role) => {
               const isSelected = selectedRole === role.id
               return (
@@ -66,57 +84,53 @@ export const RoleSelectionPage = () => {
                   key={role.id}
                   onClick={() => setSelectedRole(role.id)}
                   className={`
-                    relative flex items-center gap-5 p-5 rounded-2xl border-2 cursor-pointer
-                    transition-all duration-200 hover:shadow-lg
+                    flex items-center gap-0 rounded-xl border cursor-pointer
+                    overflow-hidden transition-all duration-150
                     ${
                       isSelected
-                        ? 'border-primary bg-background-hover shadow-md'
-                        : 'border-border bg-white hover:border-primary/50'
+                        ? 'border-primary border-2'
+                        : 'border-border border hover:border-primary/50'
                     }
                   `}
                 >
-                  <div className="flex-shrink-0">
-                    <div
-                      className={`
-                      w-14 h-14 rounded-xl flex items-center justify-center
-                      ${isSelected ? 'bg-primary/10' : 'bg-background-secondary'}
-                    `}
-                    >
-                      {role.icon}
-                    </div>
+                  <div className="w-36 h-24 flex-shrink-0">
+                    <img
+                      src={role.image}
+                      alt={role.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-text-primary">
+                  <div className="flex-1 px-5">
+                    <h3 className="text-base font-semibold text-text-primary">
                       {role.title}
                     </h3>
                     <p className="text-sm text-text-tertiary mt-0.5">
                       {role.description}
                     </p>
                   </div>
-
-                  {isSelected && (
-                    <FaCheckCircle className="text-primary w-6 h-6 absolute right-5 top-1/2 -translate-y-1/2" />
-                  )}
                 </div>
               )
             })}
           </div>
 
-          <div className="flex justify-center">
-            <Button
-              variant="primary"
-              size="large"
-              fullWidth
-              disabled={!selectedRole}
-              onClick={handleContinue}
-              className="py-3 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all"
-            >
-              Continue
-            </Button>
-          </div>
+          <button
+            onClick={handleContinue}
+            disabled={!selectedRole}
+            className={`
+              w-full py-3 rounded-xl text-base font-semibold transition-all duration-150
+              ${
+                selectedRole
+                  ? 'bg-primary text-white hover:opacity-90'
+                  : 'bg-border text-text-tertiary cursor-not-allowed'
+              }
+            `}
+          >
+            Continue
+          </button>
 
-          <p className="mt-6 text-center text-sm text-text-tertiary">
+          {/* Sign in link */}
+          <p className="mt-6 text-center text-sm text-text-secondary">
             Already have an account?{' '}
             <button
               onClick={() => navigate('/login')}
