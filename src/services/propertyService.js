@@ -1,13 +1,14 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.safenest.com/v1'
- 
-function getAuthHeaders() {
+const PROPERTIES_URL = import.meta.env.VITE_API_PROPERTIES_URL || 'http://localhost:5000/api/properties'
+const AUTH_URL = import.meta.env.VITE_API_AUTH_URL || 'http://localhost:5001/api/v1'
+
+export function getAuthHeaders() {
   const token = localStorage.getItem('token')
   return {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
 }
- 
+
 async function handleResponse(res) {
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
@@ -16,70 +17,91 @@ async function handleResponse(res) {
   return res.json()
 }
 
-export async function fetchVerifiedListings(filters = {}, page = 1, limit = 20) {
-  const params = new URLSearchParams({
-    verified: 'true',
-    page,
-    limit,
-    ...(filters.type       && { type: filters.type }),
-    ...(filters.minPrice   && { minPrice: filters.minPrice }),
-    ...(filters.maxPrice   && { maxPrice: filters.maxPrice }),
-    ...(filters.bedrooms   && { bedrooms: filters.bedrooms }),
-    ...(filters.bathrooms  && { bathrooms: filters.bathrooms }),
-    ...(filters.amenities  && { amenities: filters.amenities.join(',') }),
-    ...(filters.furnished  !== undefined && { furnished: filters.furnished }),
-    ...(filters.petsAllowed !== undefined && { petsAllowed: filters.petsAllowed }),
-  })
-  const res = await fetch(`${BASE_URL}/properties?${params}`, {
-    headers: getAuthHeaders(),
-  })
+
+export async function fetchAllListings() {
+  const res = await fetch(`${PROPERTIES_URL}/all`, { headers: getAuthHeaders() })
+  return handleResponse(res)
+}
+
+export async function searchListings(filters = {}) {
+  const params = new URLSearchParams()
+  if (filters.city) params.set('city', filters.city)
+  if (filters.maxPrice) params.set('maxPrice', filters.maxPrice)
+  if (filters.type) params.set('type', filters.type)
+  if (filters.amenities) params.set('amenities', filters.amenities)
+  const res = await fetch(`${PROPERTIES_URL}/search?${params}`, { headers: getAuthHeaders() })
   return handleResponse(res)
 }
 
 export async function fetchPropertyById(id) {
-  const res = await fetch(`${BASE_URL}/properties/${id}`, {
-    headers: getAuthHeaders(),
-  })
+  const res = await fetch(`${PROPERTIES_URL}/${id}`, { headers: getAuthHeaders() })
   return handleResponse(res)
 }
 
-export async function fetchSavedListings() {
-  const res = await fetch(`${BASE_URL}/users/me/saved-listings`, {
-    headers: getAuthHeaders(),
-  })
-  return handleResponse(res)
-}
-
-export async function saveProperty(propertyId) {
-  const res = await fetch(`${BASE_URL}/users/me/saved-listings`, {
+export async function createProperty(data) {
+  const token = localStorage.getItem('token')
+  const res = await fetch(`${PROPERTIES_URL}/create`, {
     method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify({ propertyId }),
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: data, 
   })
   return handleResponse(res)
 }
 
-export async function unsaveProperty(propertyId) {
-  const res = await fetch(`${BASE_URL}/users/me/saved-listings/${propertyId}`, {
+export async function updateProperty(id, data) {
+  const res = await fetch(`${PROPERTIES_URL}/update/${id}`, {
+    method: 'PATCH',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  })
+  return handleResponse(res)
+}
+
+export async function deleteProperty(id) {
+  const res = await fetch(`${PROPERTIES_URL}/delete/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   })
   return handleResponse(res)
 }
 
-export async function clearAllSaved() {
-  const res = await fetch(`${BASE_URL}/users/me/saved-listings`, {
-    method: 'DELETE',
-    headers: getAuthHeaders(),
+
+export async function registerUser(data) {
+  const res = await fetch(`${AUTH_URL}/users/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
   })
   return handleResponse(res)
 }
 
-export async function reportProperty(propertyId, reason = 'suspicious') {
-  const res = await fetch(`${BASE_URL}/properties/${propertyId}/report`, {
+export async function loginUser(data) {
+  const res = await fetch(`${AUTH_URL}/users/login`, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  return handleResponse(res)
+}
+
+export async function getMe() {
+  const res = await fetch(`${AUTH_URL}/users/me`, { headers: getAuthHeaders() })
+  return handleResponse(res)
+}
+
+export async function updateMe(data) {
+  const res = await fetch(`${AUTH_URL}/users/updateMe`, {
+    method: 'PATCH',
     headers: getAuthHeaders(),
-    body: JSON.stringify({ reason }),
+    body: JSON.stringify(data),
+  })
+  return handleResponse(res)
+}
+
+export async function deleteMe() {
+  const res = await fetch(`${AUTH_URL}/users/deleteMe`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
   })
   return handleResponse(res)
 }

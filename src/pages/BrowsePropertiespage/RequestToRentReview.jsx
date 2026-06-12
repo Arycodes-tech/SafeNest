@@ -7,12 +7,10 @@ export default function ReviewAndSubmitPage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // ── User info from localStorage (set during login/signup) ───────────────
+  
   const storedUser = localStorage.getItem('user')
   const user = storedUser ? JSON.parse(storedUser) : {}
 
-  // ── Request details passed from the "Request to Rent" page ──────────────
-  // When you navigate here, pass these via: navigate('/review', { state: { ... } })
   const {
     moveInDate = '12 July 2026',
     duration = '1 Year',
@@ -49,16 +47,16 @@ export default function ReviewAndSubmitPage() {
         </h1>
       </div>
 
-      {/* ── Scrollable content ── */}
+      
       <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-        {/* ── Property ── */}
+      
         <section>
           <h2 className="text-base font-bold text-text-primary mb-3">
             Property
           </h2>
 
           <div className="flex gap-4 pb-5 border-b border-border">
-            {/* Property image */}
+            
             <div className="w-28 h-24 rounded-xl overflow-hidden flex-shrink-0">
               <img
                 src={property.imageUrl}
@@ -67,7 +65,7 @@ export default function ReviewAndSubmitPage() {
               />
             </div>
 
-            {/* Property details */}
+            
             <div className="flex flex-col justify-center gap-1">
               <h3 className="font-bold text-base text-text-primary leading-tight">
                 {property.title}
@@ -81,7 +79,7 @@ export default function ReviewAndSubmitPage() {
                 </span>
               </p>
 
-              {/* Bed / Bath / Sqm icons */}
+              
               <div className="flex items-center gap-3 text-xs text-text-tertiary mt-0.5">
                 <span className="flex items-center gap-1">
                   <FaBed className="w-3.5 h-3.5" />
@@ -100,19 +98,19 @@ export default function ReviewAndSubmitPage() {
           </div>
         </section>
 
-        {/* ── Request Details ── */}
+      
         <section className="space-y-4">
           <h2 className="text-base font-bold text-text-primary">
             Request Details
           </h2>
 
-          {/* Move-in date */}
+          
           <div className="flex justify-between items-center text-sm">
             <span className="font-medium text-text-primary">Move-in-date</span>
             <span className="text-text-tertiary font-medium">{moveInDate}</span>
           </div>
 
-          {/* Rental duration */}
+      
           <div className="flex justify-between items-center text-sm">
             <span className="font-medium text-text-primary">
               Rental Duration
@@ -120,7 +118,7 @@ export default function ReviewAndSubmitPage() {
             <span className="text-text-tertiary font-medium">{duration}</span>
           </div>
 
-          {/* Message */}
+        
           <div className="space-y-1.5">
             <span className="block text-sm font-medium text-text-primary">
               Message to Agent
@@ -131,10 +129,10 @@ export default function ReviewAndSubmitPage() {
           </div>
         </section>
 
-        {/* Divider */}
+        
         <div className="border-t border-border" />
 
-        {/* ── Your Information ── */}
+      
         <section className="space-y-4">
           <h2 className="text-base font-bold text-text-primary">
             Your Information
@@ -162,7 +160,7 @@ export default function ReviewAndSubmitPage() {
           </div>
         </section>
 
-        {/* ── Legal disclaimer ── */}
+        
         <p className="text-xs text-text-secondary leading-relaxed pb-2">
           By submitting this request, you agree to our{' '}
           <button className="text-primary font-semibold hover:underline">
@@ -175,10 +173,10 @@ export default function ReviewAndSubmitPage() {
         </p>
       </div>
 
-      {/* ── Submit button ── */}
+      
       <div className="px-5 pt-3 pb-8 bg-white border-t border-border flex flex-col items-center gap-3">
         <button
-          onClick={handleSubmit}
+          onClick={() => navigate('/request-to-pay', { state: { property, moveInDate } })}
           className="w-full bg-primary text-white text-base font-semibold py-4 rounded-xl hover:opacity-90 transition-opacity"
         >
           Submit Request

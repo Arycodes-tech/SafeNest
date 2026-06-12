@@ -38,6 +38,9 @@ import { ChatConversation } from './pages/ChatConversation'
 import { ProfilePage } from './pages/ProfilePage/LandordProfile'
 import RenterProfilePage from './pages/ProfilePage/ProfilePage'
 import ReviewAndSubmitPage from './pages/BrowsePropertiespage/RequestToRentReview'
+import { RequestToPayPage } from './pages/PaymentFlow/RequestToPay'
+import { PayHoldingDepositPage } from './pages/PaymentFlow/PayHoldingDeposit'
+import { PaymentSuccessPage } from './pages/PaymentFlow/PaymentSuccess'
 
 function App() {
   return (
@@ -99,6 +102,9 @@ function App() {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/renter/profile" element={<RenterProfilePage />} />
       <Route path="/review/submit" element={<ReviewAndSubmitPage />} />
+      <Route path="/request-to-pay" element={<RequestToPayPage />} />
+      <Route path="/pay-holding-deposit" element={<PayHoldingDepositPage />} />
+      <Route path="/payment-success" element={<PaymentSuccessPage />} />
     </Routes>
   )
 }
